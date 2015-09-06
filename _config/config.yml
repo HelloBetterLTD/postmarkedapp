@@ -1,0 +1,8 @@
+---
+Name: Postmark
+---
+SiteConfig:
+  extensions:
+    - PostmarkExtension
+PostmarkAdmin:
+  member_class: 'Member'
