@@ -13,6 +13,7 @@ Config::inst()->update('CRMAdmin', 'managed_models', array(
 	$clientClass
 ));
 
-// echo BASE_PATH . '/vendor/autoload.php'; die();
-
 require_once BASE_PATH . '/vendor/autoload.php';
+
+global $databaseConfig;
+$databaseConfig['type'] = 'PostmarkMySQLDatabase';

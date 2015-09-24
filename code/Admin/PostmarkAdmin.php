@@ -26,6 +26,16 @@ class PostmarkAdmin extends ModelAdmin {
 	);
 
 
+	public function getList(){
+		$list = parent::getList();
+		if($this->modelClass == 'PostmarkMessage'){
+			$list = $list->filter('InReplyToID', 0)->sort('Created DESC');
+		}
+		return $list;
+	}
+
+
+
 
 	public function MessageForm($request = null, $itemID = 0){
 		if($itemID == 0){
@@ -56,21 +66,27 @@ class PostmarkAdmin extends ModelAdmin {
 		$member = DataList::create(Config::inst()->get('PostmarkAdmin', 'member_class'))->byID($data['ToMemberID']);
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
 
+		$message = new PostmarkMessage(array(
+			'Subject'			=> $data['Subject'],
+			'Message'			=> $data['Body'],
+			'ToID'				=> $data['ToMemberID'],
+			'FromID'			=> $signature->ID,
+		));
+		$message->write();
+
 		$sendResult = $client->sendEmail(
 			$signature->Email,
 			$member->Email,
 			$data['Subject'],
-			$data['Body']
+			nl2br($data['Body']),
+			strip_tags($data['Body']),
+			null,
+			true,
+			$message->replyToEmailAddress()
 		);
 
 		if($sendResult->__get('message') == 'OK'){
-			$message = new PostmarkMessage(array(
-				'Subject'			=> $data['Subject'],
-				'Message'			=> $data['Body'],
-				'ToID'				=> $data['ToMemberID'],
-				'MessageID'			=> $sendResult->__get('messageid'),
-				'FromID'			=> $signature->ID,
-			));
+			$message->MessageID = $sendResult->__get('messageid');
 			$message->write();
 		}
 
