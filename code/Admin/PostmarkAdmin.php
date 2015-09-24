@@ -25,6 +25,29 @@ class PostmarkAdmin extends ModelAdmin {
 		'MessageForm'
 	);
 
+	public function init() {
+		parent::init();
+		$this->showImportForm = false;
+	}
+
+	public function getEditForm($id = null, $fields = null){
+		$form = parent::getEditForm($id = null, $fields = null);
+
+		if($this->modelClass == 'PostmarkMessage'){
+			$fields = $form->Fields();
+			$grid = $fields->dataFieldByName($this->sanitiseClassName($this->modelClass));
+			if($grid){
+				$configs = $grid->getConfig();
+				$configs->removeComponentsByType('GridFieldAddNewButton');
+				$configs->removeComponentsByType('GridFieldExportButton');
+				$configs->removeComponentsByType('GridFieldPrintButton');
+			}
+
+		}
+
+		return $form;
+	}
+
 
 	public function getList(){
 		$list = parent::getList();
