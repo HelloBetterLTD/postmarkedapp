@@ -44,11 +44,12 @@ class GridFieldPostmarkMessageButton implements GridField_ColumnProvider, GridFi
 	}
 
 	public function getColumnContent($gridField, $record, $columnName) {
+		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/GridFieldPostmarkMessageButton.css');
 		$field = GridField_FormAction::create($gridField,  'MessageCustomer'.$record->ID, false, "message",
 			array('RecordID' => $record->ID))
 			->addExtraClass('gridfield-button-pencil gird-field-message')
 			->setAttribute('title', 'Message')
-			->setAttribute('data-icon', 'cross-pencil')
+			->setAttribute('data-icon', 'envelope')
 			->setDescription('Send Message');
 
 
