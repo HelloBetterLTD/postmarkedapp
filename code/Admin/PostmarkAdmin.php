@@ -28,6 +28,7 @@ class PostmarkAdmin extends ModelAdmin {
 	public function init() {
 		parent::init();
 		$this->showImportForm = false;
+		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/icons.css');
 	}
 
 	public function getEditForm($id = null, $fields = null){

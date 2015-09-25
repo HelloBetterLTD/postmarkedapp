@@ -13,6 +13,10 @@ class CRMAdmin extends ModelAdmin {
 	private static $menu_title = 'CRM';
 	private static $menu_icon = '/silverstripe-postmarked/images/icons/crm.png';
 
+	public function init(){
+		parent::init();
+		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/icons.css');
+	}
 
 	function getEditForm($id = null, $fields = null){
 
