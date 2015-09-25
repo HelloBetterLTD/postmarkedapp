@@ -37,6 +37,7 @@ class PostmarkMessage extends DataObject {
 	);
 
 
+
 	public function onBeforeDelete(){
 		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID);
 		foreach($children as $child){
@@ -51,6 +52,15 @@ class PostmarkMessage extends DataObject {
 			$this->UserHash = $this->makeUserHash();
 			$this->MessageHash = $this->makeMessageHash();
 			$this->write();
+		}
+	}
+
+	public function getRootMessage(){
+		if($this->InReplyToID == 0){
+			return $this;
+		}
+		else if($item = PostmarkMessage::get()->byID($this->InReplyToID)){
+			return $item->getRootMessage();
 		}
 	}
 
