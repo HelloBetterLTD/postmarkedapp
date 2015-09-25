@@ -96,7 +96,6 @@ class PostmarkAdmin extends ModelAdmin {
 	}
 
 	public function postmessage($data, $form){
-die();
 		$client = new PostmarkClient(SiteConfig::current_site_config()->PostmarkToken);
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
 

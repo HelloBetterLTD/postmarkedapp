@@ -28,15 +28,13 @@
 
         $(message_form_selector).entwine({
 
-            submit: function(e){
-                alert('ddd');
+            onsubmit: function(e){
                 e.preventDefault();
-                return;
                 var form = $(this);
                 var action = form.attr('action');
                 var data = form.serializeArray();
 
-                form.find('.js-message').remove();
+                form.parent().find('.js-message').remove();
 
                 var emails = form.find('.option-selector-folder-holder div.item');
                 if(emails.length > 0){
@@ -46,13 +44,10 @@
                         data    : data,
                         method  : 'POST',
                         success : function(){
-                            form.reset();
+                            form[0].reset();
                             form.before('<p class="message js-message">Email sent successfully</p>');
                         }
                     });
-
-                    // Form_MessageForm
-
                 }
                 else{
                     form.before('<p class="message js-message">Please select email addresses</p>');
