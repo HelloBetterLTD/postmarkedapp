@@ -62,16 +62,16 @@ class PostmarkAdmin extends ModelAdmin {
 
 	public function MessageForm($request = null, $itemID = 0){
 		if($itemID == 0){
-			$itemID = $_REQUEST['ToMemberID'];
+			$itemID = isset($_REQUEST['ToMemberID']) ? $_REQUEST['ToMemberID'] : 0;
 		}
 		$form = new Form(
 			$this,
 			'MessageForm',
 			new FieldList(array(
+				ObjectSelectorField::create('ToMemberID', 'To:')->setValue($itemID)->setSourceObject(Config::inst()->get('PostmarkAdmin', 'member_class'))->setDisplayField('Email'),
 				DropdownField::create('FromID', 'From')->setSource(PostmarkSignature::get()->filter('IsActive', 1)->map('ID', 'Email')->toArray()),
 				TextField::create('Subject'),
-				TextareaField::create('Body'),
-				HiddenField::create('ToMemberID')->setValue($itemID)
+				TextareaField::create('Body')
 			)),
 			new FieldList(FormAction::create('postmessage', 'Sent Message')
 		));
@@ -85,21 +85,21 @@ class PostmarkAdmin extends ModelAdmin {
 	public function postmessage($data, $form){
 
 		$client = new PostmarkClient(SiteConfig::current_site_config()->PostmarkToken);
-
-		$member = DataList::create(Config::inst()->get('PostmarkAdmin', 'member_class'))->byID($data['ToMemberID']);
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
 
 		$message = new PostmarkMessage(array(
 			'Subject'			=> $data['Subject'],
 			'Message'			=> $data['Body'],
-			'ToID'				=> $data['ToMemberID'],
+			'ToID'				=> implode(',', $data['ToMemberID']),
 			'FromID'			=> $signature->ID,
 		));
 		$message->write();
 
+		$arrEmails = PostmarkHelper::find_client_emails($data['ToMemberID']);
+
 		$sendResult = $client->sendEmail(
 			$signature->Email,
-			$member->Email,
+			implode(',', $arrEmails),
 			$data['Subject'],
 			nl2br($data['Body']),
 			strip_tags($data['Body']),

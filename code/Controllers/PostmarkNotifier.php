@@ -46,12 +46,16 @@ class PostmarkNotifier extends Controller {
 			))->first();
 
 			if($lastMessage){
+
+				$fromCustomer = PostmarkHelper::find_client_by_email($arrResponse['From']);
+
 				$message = new PostmarkMessage(array(
 					'Subject'			=> $arrResponse['Subject'],
 					'Message'			=> $arrResponse['HtmlBody'],
 					'ToID'				=> 0,
 					'MessageID'			=> $arrResponse['MessageID'],
 					'InReplyToID'		=> $lastMessage->ID,
+					'FromCustomerID'	=> $fromCustomer ? $fromCustomer->ID : 0
 				));
 				$message->write();
 

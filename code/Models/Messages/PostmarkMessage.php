@@ -12,7 +12,8 @@ class PostmarkMessage extends DataObject {
 	private static $db = array(
 		'Subject'			=> 'Varchar(500)',
 		'Message'			=> 'HTMLText',
-		'ToID'				=> 'Int',
+		'ToID'				=> 'Text',
+		'FromCustomerID'	=> 'Int',
 		'MessageID'			=> 'Varchar(100)',
 
 		// user hash and message hash are use to keep the thread going.
@@ -31,7 +32,7 @@ class PostmarkMessage extends DataObject {
 
 	private static $summary_fields = array(
 		'Subject',
-		'From'	=> 'From.Email',
+		'From'	=> 'FromEmail',
 		'To'
 	);
 
@@ -45,11 +46,26 @@ class PostmarkMessage extends DataObject {
 		}
 	}
 
-	public function getTo(){
-		$member = PostmarkHelper::find_client($this->ToID);
-		if($member){
-			return $member->Email;
+	public function getFromEmail(){
+		if($this->FromCustomerID){
+			if($customer = PostmarkHelper::find_client($this->FromCustomerID)){
+				return $customer->Email;
+			}
 		}
+		else if($this->FromID){
+			return $this->From()->Email;
+		}
+	}
+
+	public function getTo(){
+		$arrEmails = array();
+		$arrIDs = explode(',', $this->ToID);
+		foreach($arrIDs as $iID){
+			if($member = PostmarkHelper::find_client($iID)){
+				$arrEmails[] = $member->Email;
+			}
+		}
+		return implode(', ', $arrEmails);
 	}
 
 	public function makeUserHash(){

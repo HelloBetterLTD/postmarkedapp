@@ -9,12 +9,23 @@
 
 class PostmarkHelper extends Object {
 
+	public static function client_list(){
+		return DataList::create(Config::inst()->get('PostmarkAdmin', 'member_class'));
+	}
+
 	public static function find_client($id){
-		return DataList::create(Config::inst()->get('PostmarkAdmin', 'member_class'))->byId($id);
+		return self::client_list()->byId($id);
 	}
 
 	public static function find_client_by_email($email){
-		return DataList::create(Config::inst()->get('PostmarkAdmin', 'member_class'))->filter('Email', $email)->first();
+		return self::client_list()->filter('Email', $email)->first();
+	}
+
+	public static function find_client_emails($ids){
+		$list = self::client_list()->filter('ID', $ids);
+		if($list->count()){
+			return $list->column('Email');
+		}
 	}
 
 	public static function update_attachments($strContent){

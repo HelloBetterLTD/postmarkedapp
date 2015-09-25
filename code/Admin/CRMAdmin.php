@@ -18,7 +18,7 @@ class CRMAdmin extends ModelAdmin {
 
 		$form = parent::getEditForm($id, $fields);
 
-		Requirements::javascript('silverstripe-postmarked/javascript/PostmarkeMessageButton.js');
+		Requirements::javascript('silverstripe-postmarked/javascript/PostmarkMessageButton.js');
 
 		if($this->modelClass == Config::inst()->get('PostmarkAdmin', 'member_class')){
 			$fields = $form->Fields();
