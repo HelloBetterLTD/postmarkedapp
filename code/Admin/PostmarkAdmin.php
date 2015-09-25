@@ -41,6 +41,10 @@ class PostmarkAdmin extends ModelAdmin {
 				$configs->removeComponentsByType('GridFieldAddNewButton');
 				$configs->removeComponentsByType('GridFieldExportButton');
 				$configs->removeComponentsByType('GridFieldPrintButton');
+
+				$editForm = $configs->getComponentByType('GridFieldDetailForm');
+				$editForm->setItemRequestClass('PostmarkMessageGridFieldDetailForm_ItemRequest');
+
 			}
 
 		}
@@ -52,7 +56,7 @@ class PostmarkAdmin extends ModelAdmin {
 	public function getList(){
 		$list = parent::getList();
 		if($this->modelClass == 'PostmarkMessage'){
-			$list = $list->filter('InReplyToID', 0)->sort('Created DESC');
+			$list = $list->filter('InReplyToID', 0)->sort('LastEdited DESC');
 		}
 		return $list;
 	}

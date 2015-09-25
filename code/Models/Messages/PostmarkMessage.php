@@ -38,6 +38,7 @@ class PostmarkMessage extends DataObject {
 
 
 
+
 	public function onBeforeDelete(){
 		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID);
 		foreach($children as $child){
@@ -51,8 +52,31 @@ class PostmarkMessage extends DataObject {
 		if(empty($this->UserHash) || empty($this->MessageHash)){
 			$this->UserHash = $this->makeUserHash();
 			$this->MessageHash = $this->makeMessageHash();
+
+			$rootMessage = $this->getRootMessage();
+			if($rootMessage->ID == $this->ID){
+				$this->LastEdited = SS_Datetime::now()->getValue();
+			}
+			else{
+				$rootMessage->LastEdited = SS_Datetime::now()->getValue();
+				$rootMessage->write();
+			}
+
 			$this->write();
 		}
+	}
+
+
+	public function getCMSFields(){
+		$fields = parent::getCMSFields();
+
+		$fields->removeByName('Attachments');
+
+		return $fields;
+	}
+
+	public function getTitle(){
+		return $this->Subject;
 	}
 
 	public function getRootMessage(){
@@ -73,6 +97,32 @@ class PostmarkMessage extends DataObject {
 		else if($this->FromID){
 			return $this->From()->Email;
 		}
+	}
+
+	public function getFromTitle(){
+		if($this->FromCustomerID){
+			if($customer = PostmarkHelper::find_client($this->FromCustomerID)){
+				return $customer->getTitle();
+			}
+		}
+		else if($this->FromID){
+			return $this->From()->getTitle();
+		}
+	}
+
+	public function getThread($alRet = null){
+		if(!$alRet){
+			$alRet = new ArrayList();
+		}
+		$alRet->push($this);
+
+		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID)->sort('LastEdited DESC');
+		foreach($children as $child){
+			$alRet->push($child);
+			$child->getThread($alRet);
+		}
+
+		return $alRet;
 	}
 
 	public function getTo(){

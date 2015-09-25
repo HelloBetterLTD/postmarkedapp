@@ -19,4 +19,8 @@ class PostmarkSignature extends DataObject {
 		'IsActive'
 	);
 
+	public function getTitle(){
+		return $this->Email;
+	}
+
 } 
