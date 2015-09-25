@@ -11,6 +11,7 @@ class PostmarkMessageGridFieldDetailForm_ItemRequest extends GridFieldDetailForm
 
 	public function ItemEditForm() {
 		Requirements::css('silverstripe-postmarked/css/messages.css');
+		Requirements::javascript('silverstripe-postmarked/javascript/Messages.js');
 		$form = parent::ItemEditForm();
 		$form->setTemplate('PostmarkEditorTemplate');
 		return $form;

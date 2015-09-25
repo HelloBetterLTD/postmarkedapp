@@ -99,6 +99,12 @@ class PostmarkMessage extends DataObject {
 		}
 	}
 
+	public function getSummaryLine(){
+		$strContents = strip_tags($this->Message);
+		$strContents = str_replace("\n", " ", $strContents);
+		return substr($strContents, 0, 40);
+	}
+
 	public function getFromTitle(){
 		if($this->FromCustomerID){
 			if($customer = PostmarkHelper::find_client($this->FromCustomerID)){
@@ -113,10 +119,10 @@ class PostmarkMessage extends DataObject {
 	public function getThread($alRet = null){
 		if(!$alRet){
 			$alRet = new ArrayList();
+			$alRet->push($this);
 		}
-		$alRet->push($this);
 
-		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID)->sort('LastEdited DESC');
+		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID)->sort('LastEdited');
 		foreach($children as $child){
 			$alRet->push($child);
 			$child->getThread($alRet);

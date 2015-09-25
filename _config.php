@@ -17,3 +17,7 @@ require_once BASE_PATH . '/vendor/autoload.php';
 
 global $databaseConfig;
 $databaseConfig['type'] = 'PostmarkMySQLDatabase';
+
+
+define('POSTMARK_PATH', dirname(__FILE__));
+define('POSTMARK_RELATIVE_PATH', str_replace(dirname(POSTMARK_PATH) . '/', '', POSTMARK_PATH));

@@ -37,10 +37,40 @@ class Attachment extends DataObject {
 			$response = new SS_HTTPResponse($content, '200');
 			$response->addHeader('Content-Description', 'File Transfer');
 			$response->addHeader('Content-Type', $this->ContentType);
-			$response->addHeader('Content-Disposition', 'inline; filename="'.basename($this->FileName) . '"');
+			if($this->IsImage()){
+				$response->addHeader('Content-Disposition', 'inline; filename="'.basename($this->FileName) . '"');
+			}
+			else{
+				$response->addHeader('Content-Disposition', 'download; filename="'.basename($this->FileName) . '"');
+			}
 			$response->addHeader('Content-Length', $this->Length);
 			$response->output();
 		}
+	}
+
+	public function IsImage(){
+		return strpos($this->ContentType, 'image') !== false;
+	}
+
+	public function Link(){
+		return Director::absoluteBaseURL() . 'postmark-attachments/a/' . $this->ID;
+	}
+
+	public function getTitle(){
+		return $this->FileName;
+	}
+
+	function getExtension(){
+		return pathinfo($this->FileName, PATHINFO_EXTENSION);
+	}
+
+	public function Icon() {
+		$ext = strtolower($this->getExtension());
+		if(Director::fileExists(POSTMARK_PATH . "/images/icons/files/{$ext}_32.gif")) {
+			return POSTMARK_RELATIVE_PATH . "/images/icons/files/{$ext}_32.gif";
+		}
+
+		return POSTMARK_RELATIVE_PATH . "/images/icons/files/generic_32.gif";
 	}
 
 } 
