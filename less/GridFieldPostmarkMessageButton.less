@@ -1,9 +1,14 @@
-.cms table.ss-gridfield-table tbody td button {
+table.ss-gridfield-table tbody td button.gird-field-message {
 	outline: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	border: none;
+	border: none!important;
 	background: none;
+	width: 16px;
+    height: 18px;
+}
+.cms table.ss-gridfield-table tbody td button.gridfield-button-delete {
+	width: 26px;
 }
 .btn-icon-envelope,
 .ui-state-default .ui-icon.btn-icon-envelope {
@@ -11,10 +16,77 @@
 	text-indent: inherit;
 	font-size: 14px;
 	line-height: 1.2;
-	margin-top: -6px;
+	margin-top: 0;
+	position: relative;
+	left: 0;
+	top: 0;
+	cursor: pointer;
+	
+	&:hover {
+		color: #b0bec7;	
+	}
 }
 .btn-icon-envelope:before,
 .ui-state-default .ui-icon.btn-icon-envelope:before {
 	font-family: 'postmark';
 	content: "\e600";
+}
+
+//icon-close
+
+
+//
+// Message Form
+//
+.field .chzn-container-single .chzn-single {
+	height: 30px;
+	line-height: 30px;
+}
+.field .chzn-container-single .chzn-single div b {
+	background-position: 4px 3px;
+}
+.option-selector-folder-holder {
+	.values {
+		overflow: hidden;
+		
+		.item {
+			float: left;
+			margin: 0 5px 5px 0;
+			padding: 3px 4px;
+			border: 1px solid #666;
+			-moz-border-radius: 4px;
+ 			-webkit-border-radius: 4px;
+   			border-radius: 4px;
+			
+			label {
+				margin-right: 5px;
+			}
+			
+			.remove-selected-object {
+				cursor: pointer;
+				position: relative;
+				top: 1px;
+				    
+				&:hover {
+					color: #b0bec7;
+				}
+			}
+		}
+	}
+	.suggesters {
+		background: #fff;
+		border: 1px solid #cfcfcf;
+		
+		.please-wait {
+			padding: 7px;
+		}
+		
+		.online-suggestion {
+			padding: 7px;
+			
+			&:hover {
+				background: #eee;
+			}
+		}
+	}
 }

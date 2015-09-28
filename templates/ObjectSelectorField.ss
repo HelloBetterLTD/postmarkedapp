@@ -5,7 +5,7 @@
                 <div class="item">
                     <label>{$Title}</label>
                     <input type="hidden" name="{$Top.Name}[]" value="{$ID}">
-                    <span class="remove-selected-object">X</span>
+                    <span class="remove-selected-object icon-close"></span>
                 </div>
             <% end_loop %>
         <% end_if %>

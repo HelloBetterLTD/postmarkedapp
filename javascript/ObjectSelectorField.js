@@ -53,7 +53,7 @@
                 var html = '<div class="item">'
                     + '<label>' + item.data('val') + '</label>'
                     + '<input type="hidden" name="' + holder.data('name') + '[]" value="' + item.data('id') + '">'
-                        + '<span class="remove-selected-object">X</span>'
+                        + '<span class="remove-selected-object icon-close"></span>'
                     + '</div>';
                 holder.find('.values').append(html);
                 item.remove();
