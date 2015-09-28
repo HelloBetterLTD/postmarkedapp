@@ -64,6 +64,7 @@ table.ss-gridfield-table tbody td button.gird-field-message {
 .option-selector-folder-holder .suggesters {
   background: #fff;
   border: 1px solid #cfcfcf;
+  display: none;
 }
 .option-selector-folder-holder .suggesters .please-wait {
   padding: 7px;

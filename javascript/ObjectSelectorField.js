@@ -12,6 +12,7 @@
 
         var loadResults = function(dom, input){
             var suggesters = dom.find('.suggesters');
+			suggesters.show();
             var text = input.val();
             if(text.length >= 2){
                 suggesters.html('<div class="please-wait">Loading</div>');
@@ -38,6 +39,7 @@
                 });
             }
             else {
+				suggesters.hide();
                 suggesters.html('');
             }
 
