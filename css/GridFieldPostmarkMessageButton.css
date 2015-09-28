@@ -71,6 +71,7 @@ table.ss-gridfield-table tbody td button.gird-field-message {
 }
 .option-selector-folder-holder .suggesters .online-suggestion {
   padding: 7px;
+  cursor: pointer;
 }
 .option-selector-folder-holder .suggesters .online-suggestion:hover {
   background: #eee;

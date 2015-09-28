@@ -5,12 +5,13 @@
     .message-item {
         border-bottom: 1px solid #f1f1f1;
         background: #FFF;
-
+	
         .message-header {
             overflow: hidden;
             cursor: pointer;
-
-            .message-image {
+			border: 1px solid #cfcfcf;
+			
+		    .message-image {
                 float: left;
                 width: 60px;
                 height: 60px;
@@ -22,23 +23,84 @@
             .message-details {
                 float: left;
                 margin-left: 10px;
-                padding: 10px;
+                padding: 6px 10px;
                 font-weight: bold;
+				
+				&.has-sender {
+					p {
+						margin-bottom: 10px;
+					}
+					h3 {
+						margin: 5px 0;
+					}
+				}
             }
+			.message-reply {
+				float: right;
+				padding: 22px 10px;
+				
+				a:before {
+					margin-right: 5px;
+				}
+				a:hover {
+					text-decoration: none;
+					color: #1F9433;	
+				}
+			}
         }
 
         .message-contents {
             display: none;
             padding: 10px;
+			border: 1px solid #cfcfcf;
+			border-top: none;
         }
-
+		
+		&.ex,
+		&:hover {
+			
+			.message-header {
+				background: #f3f3f3;
+			}
+		}
+		
+		&.ex {
+			.message-header {
+				border-bottom: none;
+				
+				.message-image {
+					background: #cccccc;
+				}
+			}
+		}
         &.last {
+			.message-header {
+				background: #f3f3f3;
+				border-bottom: none;
+				
+				.message-image {
+					background: #cccccc;
+				}
+			}
             .message-contents {
                 display: block;
             }
+			&.collapsed {
+				.message-header {
+					background: none;
+					border-bottom: 1px solid #cfcfcf;
+					
+					.message-image {
+						background: #f1f1f1;
+					}
+				}
+				&:hover {
+					.message-header {
+						background: #f3f3f3;
+					}
+				}
+			}
         }
-
-
         .message-attachments {
             border-top: 1px solid #f1f1f1;
             padding: 10px 0;

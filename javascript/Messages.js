@@ -14,10 +14,10 @@
             onclick : function(e){
                 var message = $(this).closest(messages_selector);
                 if(message.hasClass('ex')){
-                    message.removeClass('ex').find('.message-contents').hide();
+                    message.removeClass('ex').addClass('collapsed').find('.message-contents').hide();
                 }
                 else{
-                    message.addClass('ex').find('.message-contents').show();
+                    message.addClass('ex').removeClass('collapsed').find('.message-contents').show();
                 }
                 e.preventDefault();
 

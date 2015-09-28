@@ -23,7 +23,7 @@
                         <div class="message-image">
                             <img src="silverstripe-postmarked/images/icons/user.png">
                         </div>
-                        <div class="message-details <% if $Last %>ex<% end_if %>">
+                        <div class="message-details <% if $getFromTitle || $getFromEmail %>has-sender<% end_if %><% if $Last %> ex<% end_if %>">
                             <p class="message-from">{$getFromTitle} {$getFromEmail}</p>
                             <% if $First %>
                                 <h3>{$Subject}</h3>
@@ -31,6 +31,12 @@
                                 <h3>{$SummaryLine}</h3>
                             <% end_if %>
                         </div>
+						<div class="message-reply">
+							<a href="#" class="icon-mail-reply">Reply</a>
+                        </div>
+
+
+
                     </div>
                     <div class="message-contents">
                         <div class="message-body">
