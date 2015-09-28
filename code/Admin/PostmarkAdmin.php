@@ -81,6 +81,14 @@ class PostmarkAdmin extends ModelAdmin {
 			new FieldList(FormAction::create('postmessage', 'Sent Message')
 		));
 
+		$requiredField = new RequiredFields(array(
+			'FromID',
+			'Subject',
+			'Body'
+		));
+
+		$form->setValidator($requiredField);
+
 		$form->setFormAction($this->Link('PostmarkMessage/MessageForm'));
 
 		return $form;
@@ -88,7 +96,6 @@ class PostmarkAdmin extends ModelAdmin {
 	}
 
 	public function postmessage($data, $form){
-
 		$client = new PostmarkClient(SiteConfig::current_site_config()->PostmarkToken);
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
 

@@ -13,6 +13,8 @@ Config::inst()->update('CRMAdmin', 'managed_models', array(
 	$clientClass
 ));
 
+Object::add_extension($clientClass, 'CustomerExtension');
+
 require_once BASE_PATH . '/vendor/autoload.php';
 
 global $databaseConfig;
