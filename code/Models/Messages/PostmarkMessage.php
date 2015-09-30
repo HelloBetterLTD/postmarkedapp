@@ -19,7 +19,8 @@ class PostmarkMessage extends DataObject {
 
 		// user hash and message hash are use to keep the thread going.
 		'UserHash'			=> 'Varchar(100)',
-		'MessageHash'		=> 'Varchar(100)'
+		'MessageHash'		=> 'Varchar(100)',
+		'Read'				=> 'Boolean'
 	);
 
 	private static $has_one = array(
@@ -76,6 +77,28 @@ class PostmarkMessage extends DataObject {
 		return $fields;
 	}
 
+	public function ShowReplyButton(){
+		return $this->FromCustomerID != 0;
+	}
+
+	public function ReplyFromID(){
+		if($rootMessage = $this->getRootMessage()){
+			return $rootMessage->From;
+		}
+	}
+
+	public function ReplyToID(){
+		return $this->FromCustomerID;
+	}
+
+	public function ReplyToSubject(){
+		$strRet = $this->Subject;
+		if(strpos($strRet, 'RE :') != 0){
+			$strRet = 'RE: ' . $strRet;
+		}
+		return $strRet;
+	}
+
 	public function getTitle(){
 		return $this->Subject;
 	}
@@ -130,6 +153,12 @@ class PostmarkMessage extends DataObject {
 		}
 
 		return $alRet;
+	}
+
+	public function MessagePopupLink(){
+		return Director::baseURL() . 'admin/messages/PostmarkMessage/MessagePopupContents?Subject=' . $this->ReplyToSubject()
+			. '&FromID=' . $this->ReplyFromID()
+			. '&ToID=' . $this->ReplyToID();
 	}
 
 	public function getTo(){

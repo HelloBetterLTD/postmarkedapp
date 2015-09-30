@@ -31,9 +31,11 @@
                                 <h3>{$SummaryLine}</h3>
                             <% end_if %>
                         </div>
-						<div class="message-reply">
-							<a href="#" class="icon-mail-reply">Reply</a>
-                        </div>
+                        <% if $ShowReplyButton %>
+                            <div class="message-reply">
+                                <a href="{$MessagePopupLink}" class="icon-mail-reply open-message-popup" data-from="{$ReplyFromID}" data-to="{$ReplyToID}" data-subject="{$ReplyToSubject}">Reply</a>
+                            </div>
+                        <% end_if %>
 
 
 

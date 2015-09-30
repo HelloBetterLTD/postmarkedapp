@@ -5,9 +5,42 @@
 
     $.entwine('ss', function($){
 
+        var popup = $('.postmark_popup');
+        if(popup.length == 0){
+            $('body').append('<div class="postmark_popup"></div>');
+            popup = $('.postmark_popup');
+        }
+        var dialog = popup.dialog({
+            autoOpen: false,
+            height: 500,
+            width: 600,
+            modal: true
+        });
+
+
         var messages_selector = '.message-item';
         var message_header_selector = '.message-details';
+        var message_popup_button_selector = '.open-message-popup';
         var message_form_selector = '#Form_MessageForm';
+
+
+        $(message_popup_button_selector).entwine({
+
+            onclick: function(e){
+
+                var url = this.attr('href');
+
+                $.ajax({
+                    url         : url,
+                    'success'   : function(data){
+                        dialog.html(data);
+                        dialog.dialog( "open" );
+                    }
+                });
+                return false;
+            }
+
+        });
 
         $(message_header_selector).entwine({
 

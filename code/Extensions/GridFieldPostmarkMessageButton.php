@@ -23,7 +23,7 @@ class GridFieldPostmarkMessageButton implements GridField_ColumnProvider, GridFi
 
 	public function getColumnMetadata($gridField, $columnName) {
 		if($columnName == 'Actions') {
-			return array('title' => 'Message customer');
+			return array('title' => '');
 		}
 	}
 

@@ -44,6 +44,9 @@ class ObjectSelectorField extends FormField {
 		if(!is_array($value)){
 			$this->valueArray = explode(',', $value);
 		}
+		else{
+			$this->valueArray = $value;
+		}
 		return parent::setValue($value);
 	}
 

@@ -20,7 +20,8 @@ class PostmarkAdmin extends ModelAdmin {
 	);
 
 	private static $allowed_actions = array(
-		'MessageForm'
+		'MessageForm',
+		'MessagePopupContents'
 	);
 
 	public function init() {
@@ -93,6 +94,18 @@ class PostmarkAdmin extends ModelAdmin {
 
 	}
 
+	public function MessagePopupContents(){
+		$form = $this->MessageForm();
+
+		$form->Fields()->dataFieldByName('Subject')->setValue($_GET['Subject']);
+		$form->Fields()->dataFieldByName('FromID')->setValue($_GET['FromID']);
+		$form->Fields()->dataFieldByName('ToMemberID')->setValue(array(
+			$_GET['ToID']
+		));
+
+		return $form->forTemplate();
+	}
+
 	public function postmessage($data, $form){
 
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
@@ -105,38 +118,6 @@ class PostmarkAdmin extends ModelAdmin {
 			$data['Body']
 		);
 		$email->send();
-
-
-		/*
-		$client = new PostmarkClient(SiteConfig::current_site_config()->PostmarkToken);
-		$signature = PostmarkSignature::get()->byID($data['FromID']);
-
-		$message = new PostmarkMessage(array(
-			'Subject'			=> $data['Subject'],
-			'Message'			=> $data['Body'],
-			'ToID'				=> implode(',', $data['ToMemberID']),
-			'FromID'			=> $signature->ID,
-		));
-		$message->write();
-
-		$arrEmails = PostmarkHelper::find_client_emails($data['ToMemberID']);
-
-		$sendResult = $client->sendEmail(
-			$signature->Email,
-			implode(',', $arrEmails),
-			$data['Subject'],
-			nl2br($data['Body']),
-			strip_tags($data['Body']),
-			null,
-			true,
-			$message->replyToEmailAddress()
-		);
-
-		if($sendResult->__get('message') == 'OK'){
-			$message->MessageID = $sendResult->__get('messageid');
-			$message->write();
-		}
-		*/
 
 	}
 
