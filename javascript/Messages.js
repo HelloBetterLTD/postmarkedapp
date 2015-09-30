@@ -19,7 +19,7 @@
 
 
         var messages_selector = '.message-item';
-        var message_header_selector = '.message-details';
+        var message_header_selector = '.message-header';
         var message_popup_button_selector = '.open-message-popup';
         var message_form_selector = '#Form_MessageForm';
 
