@@ -43,6 +43,7 @@
                         url     : action,
                         data    : data,
                         method  : 'POST',
+                        type    : 'POST',
                         success : function(){
                             form[0].reset();
                             form.before('<p class="message js-message">Email sent successfully</p>');

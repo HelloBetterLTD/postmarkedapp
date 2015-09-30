@@ -94,6 +94,20 @@ class PostmarkAdmin extends ModelAdmin {
 	}
 
 	public function postmessage($data, $form){
+
+		$signature = PostmarkSignature::get()->byID($data['FromID']);
+		$arrEmails = PostmarkHelper::find_client_emails($data['ToMemberID']);
+
+		$email = new Email(
+			$signature->Email,
+			implode(',', $arrEmails),
+			$data['Subject'],
+			$data['Body']
+		);
+		$email->send();
+
+
+		/*
 		$client = new PostmarkClient(SiteConfig::current_site_config()->PostmarkToken);
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
 
@@ -122,6 +136,7 @@ class PostmarkAdmin extends ModelAdmin {
 			$message->MessageID = $sendResult->__get('messageid');
 			$message->write();
 		}
+		*/
 
 	}
 

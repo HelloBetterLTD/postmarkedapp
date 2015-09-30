@@ -23,3 +23,6 @@ $databaseConfig['type'] = 'PostmarkMySQLDatabase';
 
 define('POSTMARK_PATH', dirname(__FILE__));
 define('POSTMARK_RELATIVE_PATH', str_replace(dirname(POSTMARK_PATH) . '/', '', POSTMARK_PATH));
+
+
+Email::set_mailer(new PostmarkMailer());

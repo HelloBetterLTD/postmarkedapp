@@ -12,6 +12,7 @@ class PostmarkMessage extends DataObject {
 	private static $db = array(
 		'Subject'			=> 'Varchar(500)',
 		'Message'			=> 'HTMLText',
+		'PlainMessage'		=> 'Text',
 		'ToID'				=> 'Text',
 		'FromCustomerID'	=> 'Int',
 		'MessageID'			=> 'Varchar(100)',
