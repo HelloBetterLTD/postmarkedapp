@@ -95,8 +95,8 @@ class GridFieldManageBulkRelationships
 
 		$sourceObject = $this->getSourceObject();
 		$data = new ArrayData(array(
-			'AddLink' 				=> $gridField->Link('addtorelationship'),
-			'RemoveLink' 			=> $gridField->Link('removefromrelationship'),
+			'AddLink' 				=> $gridField->Link('addtorelationship-' . $this->relationship),
+			'RemoveLink' 			=> $gridField->Link('removefromrelationship-' . $this->relationship),
 			'ButtonName' 			=> $this->buttonName,
 			'ObjectSelectorField'	=> ObjectSelectorField::create('relation_selector', null)->setCustomLink(true)->setSourceObject($sourceObject)->Field(),
 			'FromClass'				=> $this->fromClass,
@@ -109,13 +109,16 @@ class GridFieldManageBulkRelationships
 	}
 
 	public function getActions($gridField){
-		return array('addtorelationship', 'removefromrelationship');
+		return array(
+			'addtorelationship-' . $this->relationship,
+			'removefromrelationship-' . $this->relationship
+		);
 	}
 
 	public function getURLHandlers($gridField) {
 		return array(
-			'addtorelationship' 		=> 'doAddToRelationship',
-			'removefromrelationship' 	=> 'doRemoveToRelationship',
+			'addtorelationship-' . $this->relationship 			=> 'doAddToRelationship',
+			'removefromrelationship-' . $this->relationship 	=> 'doRemoveToRelationship',
 		);
 	}
 
@@ -124,15 +127,6 @@ class GridFieldManageBulkRelationships
 		if(!$item) {
 			return;
 		}
-		/*
-		if($actionName == 'addtorelationship'){
-			$this->doAddToRelationship($gridField, $request);
-		}
-		if($actionName == 'removefromrelationship'){
-			$this->doRemoveToRelationship($gridField, $request);
-		}
-		*/
-
 	}
 
 	public function getManipulatedData(GridField $gridField, SS_List $dataList) {

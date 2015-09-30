@@ -21,6 +21,28 @@
             }
         });
 
+        $('.ss-gridfield .ss-gridfield-table .ss-gridfield-item').entwine({
+            onclick: function(e){
+                if(this.find('.grid-field-select').length == 0){
+                    if($(e.target).closest('.action').length) {
+                        this._super(e);
+                        return false;
+                    }
+
+                    var editLink = this.find('.edit-link');
+                    if(editLink.length) this.getGridField().showDetailView(editLink.prop('href'));
+                }
+            }
+
+        });
+
+        $('.ss-gridfield .ss-gridfield-item .grid-field-select').entwine({
+            onclick: function(e){
+                //e.preventDefault();
+                //return false;
+            }
+        });
+
         $('.ss-gridfield').entwine({
 
             getSelectedItems: function(){

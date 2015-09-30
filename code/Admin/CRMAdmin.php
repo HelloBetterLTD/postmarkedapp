@@ -48,6 +48,7 @@ class CRMAdmin extends ModelAdmin {
 			}
 		}
 
+		$this->extend('updateCRMEditorForm', $form, $this->modelClass);
 
 		return $form;
 
