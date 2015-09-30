@@ -10,6 +10,7 @@
 class PostmarkSignature extends DataObject {
 
 	private static $db = array(
+		'Name'				=> 'Varchar(100)',
 		'Email'				=> 'Varchar(100)',
 		'IsActive'			=> 'Boolean'
 	);
@@ -18,9 +19,5 @@ class PostmarkSignature extends DataObject {
 		'Email',
 		'IsActive'
 	);
-
-	public function getTitle(){
-		return $this->Email;
-	}
 
 } 

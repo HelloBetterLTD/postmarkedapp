@@ -16,9 +16,7 @@ class PostmarkAdmin extends ModelAdmin {
 	private static $menu_icon = '/silverstripe-postmarked/images/icons/post.png';
 
 	private static $managed_models = array(
-		'PostmarkMessage',
-		'CustomerTag',
-		'CustomerStatus'
+		'PostmarkMessage'
 	);
 
 	private static $allowed_actions = array(
@@ -76,7 +74,7 @@ class PostmarkAdmin extends ModelAdmin {
 				ObjectSelectorField::create('ToMemberID', 'To:')->setValue($itemID)->setSourceObject(Config::inst()->get('PostmarkAdmin', 'member_class'))->setDisplayField('Email'),
 				DropdownField::create('FromID', 'From')->setSource(PostmarkSignature::get()->filter('IsActive', 1)->map('ID', 'Email')->toArray()),
 				TextField::create('Subject'),
-				TextareaField::create('Body')
+				QuillEditorField::create('Body')
 			)),
 			new FieldList(FormAction::create('postmessage', 'Sent Message')
 		));

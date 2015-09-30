@@ -13,6 +13,11 @@ class CRMAdmin extends ModelAdmin {
 	private static $menu_title = 'CRM';
 	private static $menu_icon = '/silverstripe-postmarked/images/icons/crm.png';
 
+	private static $managed_models = array(
+		'CustomerTag',
+		'CustomerStatus'
+	);
+
 	public function init(){
 		parent::init();
 		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/icons.css');
@@ -30,6 +35,7 @@ class CRMAdmin extends ModelAdmin {
 			if($grid){
 				$configs = $grid->getConfig();
 				$configs->addComponent(new GridFieldPostmarkMessageButton());
+				$configs->addComponent(new GridFieldSelectRecord(), 'GridFieldDataColumns');
 			}
 		}
 
