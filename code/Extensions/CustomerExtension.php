@@ -10,7 +10,7 @@
 class CustomerExtension extends DataExtension {
 
 	private static $many_many = array(
-		'Tag'			=> 'CustomerTag',
+		'Tags'			=> 'CustomerTag',
 		'Statuses'		=> 'CustomerStatus'
 	);
 

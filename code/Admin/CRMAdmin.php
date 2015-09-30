@@ -33,9 +33,18 @@ class CRMAdmin extends ModelAdmin {
 			$fields = $form->Fields();
 			$grid = $fields->dataFieldByName($this->sanitiseClassName($this->modelClass));
 			if($grid){
+
+
 				$configs = $grid->getConfig();
 				$configs->addComponent(new GridFieldPostmarkMessageButton());
 				$configs->addComponent(new GridFieldSelectRecord(), 'GridFieldDataColumns');
+				$configs->addComponent($tags = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
+				$tags->setFromClass($this->modelClass)->setRelationship('Tags')->setTitle('Tags');
+
+
+				$configs->addComponent($status = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
+				$status->setFromClass($this->modelClass)->setRelationship('Statuses')->setTitle('Status');
+
 			}
 		}
 

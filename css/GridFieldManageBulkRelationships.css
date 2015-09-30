@@ -1,0 +1,12 @@
+.cms .ss-gridfield .grid-field-bulk-operation {
+    float: none;
+    clear: both;
+    width: 100%;
+    overflow: hidden;
+}
+
+.cms .ss-gridfield .grid-field-bulk-operation .option-selector-folder-holder {
+    float: left;
+    max-width: 512px;
+    min-width: 512px;
+}
