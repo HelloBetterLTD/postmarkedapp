@@ -1,14 +1,18 @@
-<div class="grid-field-bulk-operation" data-fromclass="$FromClass" data-relationship="{$Relationship}">
+<div class="grid-field-bulk-operation tabbed-block" data-fromclass="$FromClass" data-relationship="{$Relationship}">
 
-    <label>{$Title}</label>
+    <label class="tab-title {$Relationship}" data-tab="tab-{$Relationship}">{$Title}</label>
 
-    {$ObjectSelectorField}
+		<div id="tab-{$Relationship}" class="tab-content">
+    		{$ObjectSelectorField}
 
-    <a href="{$AddLink}" class="ss-ui-action-constructive ss-ui-button ui-button ui-widget ui-state-default ui-corner-all grid-field-bulk-op add-to-relation">
-        {$ButtonName}
-    </a>
-    <a href="{$RemoveLink}" class="ss-ui-action-constructive ss-ui-button ui-button ui-widget ui-state-default ui-corner-all grid-field-bulk-op remove-from-relation">
-        Remove
-    </a>
+			<div class="tab-buttons">
+    			<a href="{$AddLink}" class="ss-ui-action-constructive ss-ui-button ui-button ui-widget ui-state-default ui-corner-all grid-field-bulk-op add-to-relation">
+	        		{$ButtonName}
+	    		</a>
 
+	    		<a href="{$RemoveLink}" class="ss-ui-action-constructive ss-ui-button ui-button ui-widget ui-state-default ui-corner-all grid-field-bulk-op remove-from-relation">
+	        		Remove
+	    		</a>
+			</div>
+	</div>
 </div>
