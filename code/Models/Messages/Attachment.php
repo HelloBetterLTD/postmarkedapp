@@ -33,7 +33,7 @@ class Attachment extends DataObject {
 			}
 		}
 		else {
-			$content = base64_decode(chunk_split($this->Content));
+			$content = base64_decode($this->Content);
 			$response = new SS_HTTPResponse($content, '200');
 			$response->addHeader('Content-Description', 'File Transfer');
 			$response->addHeader('Content-Type', $this->ContentType);

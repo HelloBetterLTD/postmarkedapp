@@ -93,6 +93,31 @@
 
         });
 
+
+        $('.toggle-block').entwine({
+            onmatch: function(){
+
+                var dom = $(this);
+                var contents = dom.find('.contents');
+                var header = dom.find('h4');
+
+                contents.hide();
+                header.on('click', function(){
+                    if(header.hasClass('ex')){
+                        contents.hide();
+                        header.removeClass('ex');
+                    }
+                    else{
+                        contents.show();
+                        header.addClass('ex');
+                    }
+
+                    return false;
+                });
+
+            }
+        });
+
     });
 
 

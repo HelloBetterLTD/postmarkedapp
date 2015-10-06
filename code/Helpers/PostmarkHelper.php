@@ -44,4 +44,36 @@ class PostmarkHelper extends Object {
 		return $strContent;
 	}
 
+	public static function MergeTags(){
+		$arrRet = array();
+		$className = Config::inst()->get('PostmarkAdmin', 'member_class');
+		$object = singleton($className);
+		if($db = $object->db()){
+			foreach($db as $var => $type){
+				$arrRet[$var] = $var;
+			}
+		}
+
+		if($casting = Config::inst()->get($className, 'casting')){
+			foreach($casting as $var => $type){
+				$arrRet[] = $var;
+			}
+		}
+		return $arrRet;
+	}
+
+	public static function MergeEmailText($text, $customer){
+		$strRet = $text;
+		$arrTags = self::MergeTags();
+		foreach($arrTags as $tag){
+			if(method_exists($customer, $tag)){
+				$strRet = str_replace('{' . $tag . '}', $customer->$tag(), $strRet);
+			}
+			else{
+				$strRet = str_replace('{' . $tag . '}', $customer->getField($tag), $strRet);
+			}
+		}
+		return $strRet;
+	}
+
 } 

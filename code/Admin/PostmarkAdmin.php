@@ -68,6 +68,9 @@ class PostmarkAdmin extends ModelAdmin {
 		if($itemID == 0){
 			$itemID = isset($_REQUEST['ToMemberID']) ? $_REQUEST['ToMemberID'] : 0;
 		}
+
+		$mergeText = "<ul><li>{" . implode("}</li><li>{", PostmarkHelper::MergeTags()) . "}</li></ul>";
+
 		$form = new Form(
 			$this,
 			'MessageForm',
@@ -76,6 +79,10 @@ class PostmarkAdmin extends ModelAdmin {
 				DropdownField::create('FromID', 'From')->setSource(PostmarkSignature::get()->filter('IsActive', 1)->map('ID', 'Email')->toArray()),
 				TextField::create('Subject'),
 				QuillEditorField::create('Body'),
+				LiteralField::create('MergeTypes', '<div class="varialbes toggle-block">
+					<h4>Merge Values</h4>
+					<div class="contents">' . $mergeText . '</div>
+				</div>'),
 				HiddenField::create('InReplyToID')
 			)),
 			new FieldList(FormAction::create('postmessage', 'Sent Message')
@@ -110,21 +117,23 @@ class PostmarkAdmin extends ModelAdmin {
 	public function postmessage($data, $form){
 
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
-		$arrEmails = PostmarkHelper::find_client_emails($data['ToMemberID']);
 		PostmarkMailer::RecordEmails(true);
 
-		$email = new Email(
-			$signature->Email,
-			implode(',', $arrEmails),
-			$data['Subject'],
-			$data['Body']
-		);
+		$clients = PostmarkHelper::client_list()->filter('ID', $data['ToMemberID']);
+		foreach($clients as $client){
+			$email = new Email(
+				$signature->Email,
+				$client->Email,
+				$data['Subject'],
+				PostmarkHelper::MergeEmailText($data['Body'], $client)
+			);
 
 
-		$this->extend('updatePostmessage', $email, $data);
+			$this->extend('updatePostmessage', $email, $data);
 
 
-		$email->send();
+			$email->send();
+		}
 
 		PostmarkMailer::RecordEmails(false);
 
