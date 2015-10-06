@@ -118,7 +118,7 @@ class PostmarkMailer extends Mailer {
 			$plainContent,
 			null,
 			true,
-			$message->replyToEmailAddress(),
+			$message ? $message->replyToEmailAddress() : $from,
 			$cc,
 			$bcc,
 			$arrangedHeaders,
