@@ -52,7 +52,6 @@ class PostmarkAdmin extends ModelAdmin {
 		return $form;
 	}
 
-
 	public function getList(){
 		$list = parent::getList();
 		if($this->modelClass == 'PostmarkMessage'){

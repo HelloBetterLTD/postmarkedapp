@@ -54,4 +54,27 @@ class CRMAdmin extends ModelAdmin {
 
 	}
 
+	public function getSearchContext(){
+		$customerClass = Config::inst()->get('PostmarkAdmin', 'member_class');
+		if($this->modelClass == $customerClass){
+			$context = new CustomerSearchContext($customerClass);
+			foreach($context->getFields() as $field){
+
+				if(isset($_REQUEST['q']) && isset($_REQUEST['q'][$field->getName()])){
+					$field->setValue($_REQUEST['q'][$field->getName()]);
+				}
+				$field->setName(sprintf('q[%s]', $field->getName()));
+			}
+			foreach($context->getFilters() as $filter){
+				$filter->setFullName(sprintf('q[%s]', $filter->getFullName()));
+			}
+			return $context;
+		}
+		return parent::getSearchContext();
+	}
+
+
+
+
+
 } 
