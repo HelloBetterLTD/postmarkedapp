@@ -16,11 +16,14 @@ class CustomerSearchContext extends SearchContext {
 			'Email'				=> new PartialMatchFilter('Email'),
 			'Company'			=> new PartialMatchFilter('Company')
 		);
-
 		parent::__construct($modelClass, null, $filters);
 	}
 
 	function getSearchFields(){
+		if($this->fields && $this->fields->count()){
+			return $this->fields;
+		}
+
 		$fields = new FieldList(
 			TextField::create('Name'),
 			TextField::create('Email'),
@@ -31,8 +34,15 @@ class CustomerSearchContext extends SearchContext {
 
 		$this->extend('updateCustomerSearchFields', $fields);
 
-		return $fields;
+		$this->fields = $fields;
+		return $this->fields;
 	}
+
+	function getFields(){
+		return $this->getSearchFields();
+	}
+
+
 
 	public function getQuery($searchParams, $sort = false, $limit = false, $existingQuery = null) {
 
