@@ -11,8 +11,13 @@ use Postmark\Models\PostmarkAttachment;
 
 class PostmarkMailer extends Mailer {
 
-	public function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = false, $customheaders = false) {
+	private static $record_emails = false;
 
+	public static function RecordEmails($bRecord){
+		self::$record_emails = $bRecord;
+	}
+
+	public function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = false, $customheaders = false) {
 		return $this->sendPostmarked(
 			$to,
 			$from,
@@ -51,8 +56,8 @@ class PostmarkMailer extends Mailer {
 
 		$customerIDs = PostmarkHelper::client_list()->filter('Email', explode(',', $to))->column('ID');
 
-
-		if(is_array($customerIDs) && !empty($customerIDs)){
+		$message = null;
+		if(is_array($customerIDs) && !empty($customerIDs) && self::$record_emails){
 			$message = new PostmarkMessage(array(
 				'Subject'			=> $subject,
 				'Message'			=> $htmlContent,
@@ -76,13 +81,26 @@ class PostmarkMailer extends Mailer {
 		if($attachedFiles && is_array($attachedFiles)){
 			$attachments = array();
 			foreach($attachedFiles as $attachment){
-				$postMarkAttachment[] = PostmarkAttachment::fromRawData(
+				$attachments[] = PostmarkAttachment::fromRawData(
 					$attachment['contents'],
 					$attachment['filename'],
 					$attachment['mimetype']
 				);
+
+				if(is_array($customerIDs) && !empty($customerIDs) && self::$record_emails){
+					$postmarkAttachment = new Attachment(array(
+						'Content'				=> base64_encode($attachment['filename']),
+						'FileName'				=> $attachment['filename'],
+						'ContentType'			=> $attachment['mimetype'],
+						'PostmarkMessageID'		=> $message->ID
+					));
+					$postmarkAttachment->write();
+				}
 			}
 		}
+
+
+
 
 		$arrangedHeaders = null;
 		if($customheaders && is_array($customheaders) && count($customheaders)){
@@ -107,7 +125,7 @@ class PostmarkMailer extends Mailer {
 			$attachments
 		);
 
-		if(is_array($customerIDs) && !empty($customerIDs) && $sendResult->__get('message') == 'OK'){
+		if(is_array($customerIDs) && !empty($customerIDs)  && self::$record_emails && $sendResult->__get('message') == 'OK'){
 			$message->MessageID = $sendResult->__get('messageid');
 			$message->write();
 		}

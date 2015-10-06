@@ -86,11 +86,11 @@ class PostmarkAdmin extends ModelAdmin {
 			'Subject',
 			'Body'
 		));
-
 		$form->setValidator($requiredField);
 
-		$form->setFormAction($this->Link('PostmarkMessage/MessageForm'));
+		$this->extend('updateMessageForm', $form, $itemID);
 
+		$form->setFormAction($this->Link('PostmarkMessage/MessageForm'));
 		return $form;
 
 	}
@@ -111,6 +111,7 @@ class PostmarkAdmin extends ModelAdmin {
 
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
 		$arrEmails = PostmarkHelper::find_client_emails($data['ToMemberID']);
+		PostmarkMailer::RecordEmails(true);
 
 		$email = new Email(
 			$signature->Email,
@@ -118,7 +119,15 @@ class PostmarkAdmin extends ModelAdmin {
 			$data['Subject'],
 			$data['Body']
 		);
+
+
+		$this->extend('updatePostmessage', $email, $data);
+
+
 		$email->send();
+
+		PostmarkMailer::RecordEmails(false);
+
 
 	}
 
