@@ -3,6 +3,7 @@
     <label class="tab-title {$Relationship}" data-tab="tab-{$Relationship}">{$Title}</label>
 
 		<div id="tab-{$Relationship}" class="tab-content">
+            <p>Start typing to select items: </p>
     		{$ObjectSelectorField}
 
 			<div class="tab-buttons">

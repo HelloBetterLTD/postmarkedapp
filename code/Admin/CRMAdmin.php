@@ -34,7 +34,6 @@ class CRMAdmin extends ModelAdmin {
 			$grid = $fields->dataFieldByName($this->sanitiseClassName($this->modelClass));
 			if($grid){
 
-
 				$configs = $grid->getConfig();
 				$configs->addComponent(new GridFieldPostmarkMessageButton());
 				$configs->addComponent(new GridFieldSelectRecord(), 'GridFieldDataColumns');
@@ -44,6 +43,16 @@ class CRMAdmin extends ModelAdmin {
 
 				$configs->addComponent($status = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
 				$status->setFromClass($this->modelClass)->setRelationship('Statuses')->setTitle('Status');
+
+				$columns = $configs->getComponentByType('GridFieldDataColumns');
+				$columns->setDisplayFields(array(
+					'getFullName'			=> 'Name',
+					'Email'					=> 'Email',
+					'Company'				=> 'Company',
+					'getTagCollection'		=> 'Tags',
+					'getStatusCollection'	=> 'Status',
+					'getNotifications'		=> 'Notifications'
+				));
 
 			}
 		}

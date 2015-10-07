@@ -19,17 +19,7 @@ class PostmarkNotifier extends Controller {
 
 	function recordInbound(){
 
-		/*
-		$strFile = BASE_PATH . '/tmp.json';
-		$json = file_get_contents("php://input");
-		file_put_contents($strFile, $json);
-		die();
-		*/
-
-
 		$strJson = file_get_contents("php://input");
-
-		//$strJson = file_get_contents($strFile);
 
 		try {
 			$arrResponse = Convert::json2array($strJson);
