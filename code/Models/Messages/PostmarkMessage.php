@@ -46,6 +46,8 @@ class PostmarkMessage extends DataObject {
 		foreach($children as $child){
 			$child->delete();
 		}
+
+		parent::onBeforeDelete();
 	}
 
 
