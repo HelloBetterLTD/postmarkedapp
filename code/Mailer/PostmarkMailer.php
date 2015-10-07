@@ -12,9 +12,14 @@ use Postmark\Models\PostmarkAttachment;
 class PostmarkMailer extends Mailer {
 
 	private static $record_emails = false;
+	private static $reply_to_message = 0;
 
 	public static function RecordEmails($bRecord){
 		self::$record_emails = $bRecord;
+	}
+
+	public static function ReplyToMessageID($reply_to_message){
+		self::$reply_to_message = $reply_to_message;
 	}
 
 	public function sendPlain($to, $from, $subject, $plainContent, $attachedFiles = false, $customheaders = false) {
@@ -64,6 +69,7 @@ class PostmarkMailer extends Mailer {
 				'PlainMessage'		=> $plainContent,
 				'ToID'				=> implode(',', $customerIDs),
 				'FromID'			=> $signature ? $signature->ID : $signature,
+				'InReplyToID'		=> self::$reply_to_message
 			));
 			$message->write();
 		}
