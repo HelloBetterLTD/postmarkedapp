@@ -14,4 +14,39 @@ class CustomerExtension extends DataExtension {
 		'Statuses'		=> 'CustomerStatus'
 	);
 
+	private static $casting = array(
+		'getFullName'			=> 'Varchar',
+		'getTagCollection'		=> 'Varchar',
+		'getStatusCollection'	=> 'Varchar',
+		'getNotifications'		=> 'Int'
+	);
+
+	public function getFullName(){
+		return $this->owner->FirstName . ' ' . $this->owner->Surname;
+	}
+
+	public function getTagCollection(){
+		$tags = $this->owner->Tags();
+		if($tags->count()){
+			$arrTags = $tags->column('Title');
+			return implode(',', $arrTags);
+		}
+	}
+
+	public function getStatusCollection(){
+		$statuses = $this->owner->Statuses();
+		if($statuses->count()){
+			$arrTags = $statuses->column('Title');
+			return implode(',', $arrTags);
+		}
+	}
+
+	public function getNotifications(){
+		$list = PostmarkMessage::get()->filter(array(
+			'FromCustomerID'		=> $this->owner->ID,
+			'Read'					=> 0
+		));
+		return $list->count();
+	}
+
 } 

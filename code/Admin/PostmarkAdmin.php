@@ -30,6 +30,7 @@ class PostmarkAdmin extends ModelAdmin {
 		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/icons.css');
 	}
 
+
 	public function getEditForm($id = null, $fields = null){
 		$form = parent::getEditForm($id = null, $fields = null);
 
@@ -61,6 +62,24 @@ class PostmarkAdmin extends ModelAdmin {
 	}
 
 
+	public function getSearchContext(){
+		if($this->modelClass == 'PostmarkMessage'){
+			$context = new MessageSearchContext('PostmarkMessage');
+			foreach($context->getFields() as $field){
+
+				if(isset($_REQUEST['q']) && isset($_REQUEST['q'][$field->getName()])){
+					$field->setValue($_REQUEST['q'][$field->getName()]);
+				}
+				$field->setName(sprintf('q[%s]', $field->getName()));
+			}
+			foreach($context->getFilters() as $filter){
+				$filter->setFullName(sprintf('q[%s]', $filter->getFullName()));
+			}
+			return $context;
+		}
+		return parent::getSearchContext();
+	}
+
 
 
 	public function MessageForm($request = null, $itemID = 0){
@@ -82,7 +101,7 @@ class PostmarkAdmin extends ModelAdmin {
 					<h4>Merge Values</h4>
 					<div class="contents">' . $mergeText . '</div>
 				</div>'),
-				HiddenField::create('InReplyToID')
+				HiddenField::create('InReplyToID')->setValue(isset($_REQUEST['ReplyToMessageID']) ? $_REQUEST['ReplyToMessageID'] : 0)
 			)),
 			new FieldList(FormAction::create('postmessage', 'Sent Message')
 		));
@@ -117,6 +136,7 @@ class PostmarkAdmin extends ModelAdmin {
 
 		$signature = PostmarkSignature::get()->byID($data['FromID']);
 		PostmarkMailer::RecordEmails(true);
+		PostmarkMailer::ReplyToMessageID($data['InReplyToID']);
 
 		$clients = PostmarkHelper::client_list()->filter('ID', $data['ToMemberID']);
 		foreach($clients as $client){
@@ -135,6 +155,7 @@ class PostmarkAdmin extends ModelAdmin {
 		}
 
 		PostmarkMailer::RecordEmails(false);
+		PostmarkMailer::ReplyToMessageID(0);
 
 
 	}

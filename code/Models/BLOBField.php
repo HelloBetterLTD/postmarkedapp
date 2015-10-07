@@ -11,7 +11,7 @@ class BLOBField extends DBField {
 
 	public function requireField() {
 		$parts = array(
-			'datatype' 		=> 'blob',
+			'datatype' 		=> 'longblob',
 			'arrayValue' 	=> $this->arrayValue
 		);
 

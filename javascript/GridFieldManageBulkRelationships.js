@@ -8,8 +8,8 @@
         var button = '.grid-field-bulk-op';
 		var getGriFields = '.ss-gridfield';
 		var tabbedBlocks = '.tabbed-block';
-		var tabbedLink = '.tabbed-block .tab-title'; 
-		
+		var tabbedLink = '.tabbed-block .tab-title';
+
         $(button).entwine({
             onclick: function(e){
                 e.preventDefault();
@@ -50,16 +50,16 @@
         });
 
 		$(document).ajaxComplete(function () {
-				
+
 			if (!$(tabbedBlocks).parent().hasClass('grid-field-tabbed-section')) {
 				$('body').find(tabbedBlocks).wrapAll( "<div class='grid-field-tabbed-section'></div>");
 				$('.tab-title.Tags').addClass('current');
 				$('#tab-Tags').addClass('current');
 			}
-			
+
 		});
-		
-		
+
+
 		$(tabbedLink).entwine({
 
 			onclick: function(){

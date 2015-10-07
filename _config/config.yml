@@ -8,5 +8,5 @@ PostmarkAdmin:
   member_class: 'Member'
 Director:
   rules:
-    'postmark-notifier//$Action/$ID/$OtherID'  : 'PostmarkNotifier',
+    'postmark-notifier//$Action/$ID/$OtherID'          : 'PostmarkNotifier',
     'postmark-attachments//$Action/$ID/$OtherID'       : 'PostmarkAttachments'

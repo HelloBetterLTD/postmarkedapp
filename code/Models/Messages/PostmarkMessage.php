@@ -46,6 +46,8 @@ class PostmarkMessage extends DataObject {
 		foreach($children as $child){
 			$child->delete();
 		}
+
+		parent::onBeforeDelete();
 	}
 
 
@@ -158,7 +160,8 @@ class PostmarkMessage extends DataObject {
 	public function MessagePopupLink(){
 		return Director::baseURL() . 'admin/messages/PostmarkMessage/MessagePopupContents?Subject=' . $this->ReplyToSubject()
 			. '&FromID=' . $this->ReplyFromID()
-			. '&ToID=' . $this->ReplyToID();
+			. '&ToID=' . $this->ReplyToID()
+			. '&ReplyToMessageID=' . $this->ID;
 	}
 
 	public function getTo(){
