@@ -30,6 +30,7 @@ class PostmarkAdmin extends ModelAdmin {
 		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/icons.css');
 	}
 
+
 	public function getEditForm($id = null, $fields = null){
 		$form = parent::getEditForm($id = null, $fields = null);
 
@@ -60,6 +61,24 @@ class PostmarkAdmin extends ModelAdmin {
 		return $list;
 	}
 
+
+	public function getSearchContext(){
+		if($this->modelClass == 'PostmarkMessage'){
+			$context = new MessageSearchContext('PostmarkMessage');
+			foreach($context->getFields() as $field){
+
+				if(isset($_REQUEST['q']) && isset($_REQUEST['q'][$field->getName()])){
+					$field->setValue($_REQUEST['q'][$field->getName()]);
+				}
+				$field->setName(sprintf('q[%s]', $field->getName()));
+			}
+			foreach($context->getFilters() as $filter){
+				$filter->setFullName(sprintf('q[%s]', $filter->getFullName()));
+			}
+			return $context;
+		}
+		return parent::getSearchContext();
+	}
 
 
 
