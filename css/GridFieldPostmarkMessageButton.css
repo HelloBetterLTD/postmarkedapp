@@ -4,8 +4,18 @@ table.ss-gridfield-table tbody td button.gird-field-message {
   -moz-appearance: none;
   border: none!important;
   background: none;
-  width: 16px;
   height: 18px;
+}
+table.ss-gridfield-table tbody td button.gird-field-message,
+.cms table.ss-gridfield-table tbody td a.edit-link,
+.cms table.ss-gridfield-table tbody td button.gridfield-button-delete,
+.btn-icon-envelope,
+.ui-state-default .ui-icon.btn-icon-envelope,
+.cms table.ss-gridfield-table tbody td a.read-more-link {
+  width: 16px!important;
+}
+.cms table.ss-gridfield-table tbody td a.read-more-link:before {
+  width: 16px;
 }
 .cms table.ss-gridfield-table tbody td button.gridfield-button-delete {
   width: 26px;
