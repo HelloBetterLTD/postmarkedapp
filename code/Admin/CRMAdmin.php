@@ -38,11 +38,11 @@ class CRMAdmin extends ModelAdmin {
 				$configs->addComponent(new GridFieldPostmarkMessageButton());
 				$configs->addComponent(new GridFieldSelectRecord(), 'GridFieldDataColumns');
 				$configs->addComponent($tags = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
-				$tags->setFromClass($this->modelClass)->setRelationship('Tags')->setTitle('Tags');
+				$tags->setFromClass($this->modelClass)->setRelationship('Tags')->setTitle(_t('CRMAdmin.Tags', 'Tags'));
 
 
 				$configs->addComponent($status = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
-				$status->setFromClass($this->modelClass)->setRelationship('Statuses')->setTitle('Status');
+				$status->setFromClass($this->modelClass)->setRelationship('Statuses')->setTitle(_t('CRMAdmin.Status', 'Status'));
 
 				$columns = $configs->getComponentByType('GridFieldDataColumns');
 				$columns->setDisplayFields(array(
@@ -56,6 +56,11 @@ class CRMAdmin extends ModelAdmin {
 
 				$configs->removeComponentsByType('GridFieldExportButton');
 				$configs->removeComponentsByType('GridFieldPrintButton');
+
+				$addButton = $configs->getComponentByType('GridFieldAddNewButton');
+				if($addButton){
+					$addButton->setButtonName(_t('CRMAdmin.AddCustomerButton', 'Add Customer'));
+				}
 
 			}
 		}

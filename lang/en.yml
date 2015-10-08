@@ -1,0 +1,8 @@
+en:
+  CRMAdmin:
+    AddCustomerButton: 'Add Customer'
+    Tags: 'Tags'
+    Status: 'Status'
+    StartTyping: 'Start typing to select items'
+    Add: 'Add'
+    Remove: 'Remove'
