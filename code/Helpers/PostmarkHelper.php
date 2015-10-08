@@ -9,6 +9,8 @@
 
 class PostmarkHelper extends Object {
 
+	private static $locales = null;
+
 	public static function client_list(){
 		return DataList::create(Config::inst()->get('PostmarkAdmin', 'member_class'));
 	}
@@ -74,6 +76,24 @@ class PostmarkHelper extends Object {
 			}
 		}
 		return $strRet;
+	}
+
+
+	public static function MemberLocales(){
+		if(self::$locales){
+			return self::$locales;
+		}
+		self::$locales = array();
+		$object = singleton(Config::inst()->get('PostmarkAdmin', 'member_class'));
+		if($db = $object->db()){
+			if(array_key_exists('Locale', $db)){
+				$locales = DB::query('SELECT DISTINCT Locale AS Locale FROM ' . Config::inst()->get('PostmarkAdmin', 'member_class') . ' WHERE Locale IS NOT NULL');
+				foreach($locales as $row){
+					self::$locales[$row['Locale']] = i18n::get_language_name(substr($row['Locale'], 0, 2));
+				}
+			}
+		}
+		return self::$locales;
 	}
 
 } 
