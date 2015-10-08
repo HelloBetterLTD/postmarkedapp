@@ -1,0 +1,24 @@
+.cms table.ss-gridfield-table tbody td a.read-more-link {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.cms table.ss-gridfield-table tbody td a.read-more-link:hover {
+    text-decoration: none;
+    opacity: 0.7;
+}
+
+.cms table.ss-gridfield-table tbody td a.read-more-link:before {
+    width: 20px;
+    height: 20px;
+    display: block;
+    font-size: 16px;
+    color: black;
+}
+
+.cms table.ss-gridfield-table tbody td button {
+    overflow: hidden;
+}
