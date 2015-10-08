@@ -32,11 +32,14 @@ class GridFieldMessageStatusColumn implements GridField_ColumnProvider {
 
 	public function getColumnContent($gridField, $record, $columnName) {
 		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/GridFieldMessageStatusColumn.css');
+		Requirements::javascript(POSTMARK_RELATIVE_PATH . '/javascript/GridFieldMessageStatusColumn.js');
 
-		return <<<HTML
-<span class="action action-detail read-more-link icon-open_in_new" href="" title=""></span>
+		$strIcon = 'icon-envelope2 opened';
+		if($record->hasUnreadMessage()){
+			$strIcon = 'icon-envelope unread-message';
+		}
 
-HTML;
+		return '<span class="action thread-detail"><span class="message-status-icon ' . $strIcon . '"></span>' . $record->getCountString() . '</span>';
 
 	}
 

@@ -216,4 +216,48 @@ class PostmarkMessage extends DataObject {
 
 	}
 
+	public function Children(){
+		return PostmarkMessage::get()->filter('InReplyToID', $this->ID);
+	}
+
+	public function hasUnreadMessage(){
+		if(!$this->Read && $this->FromCustomerID != 0){
+			return true;
+		}
+		foreach($this->Children() as $child){
+			if($child->hasUnreadMessage()){
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public function MessageCounter(&$count, $bUnread = false){
+		if(!$bUnread){
+			$count += 1;
+		}
+		else if(!$this->Read && $this->FromCustomerID != 0){
+			$count += 1;
+		}
+		foreach($this->Children() as $child){
+			$child->MessageCounter($count);
+		}
+	}
+
+	public function CountMessages(){
+		$iCount = 0;
+		$this->MessageCounter($iCount);
+		return $iCount;
+	}
+
+	public function CountUnreadMessage(){
+		$iCount = 0;
+		$this->MessageCounter($iCount, true);
+		return $iCount;
+	}
+
+	public function getCountString(){
+		return $this->CountUnreadMessage() . '/' . $this->CountMessages();
+	}
+
 } 
