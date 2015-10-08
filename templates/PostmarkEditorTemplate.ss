@@ -18,8 +18,8 @@
         <% with $Controller.getRecord %>
             <div class="messages-holder">
             <% loop $Thread %>
-                <div class="message-item {$FirstLast}">
-                    <div class="message-header">
+                <div class="message-item {$FirstLast} <% if $Last %>$updateAsRead<% end_if %>">
+                    <div class="message-header" <% if not $Read %>data-readlink="{$Up.Up.ReadLink('read')}" data-id="{$ID}"<% end_if %>>
                         <div class="message-image">
                             <img src="silverstripe-postmarked/images/icons/user.png">
                         </div>

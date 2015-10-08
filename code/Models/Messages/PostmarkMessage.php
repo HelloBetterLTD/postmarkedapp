@@ -157,7 +157,7 @@ class PostmarkMessage extends DataObject {
 			$alRet->push($this);
 		}
 
-		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID)->sort('LastEdited');
+		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID)->sort('ID');
 		foreach($children as $child){
 			$alRet->push($child);
 			$child->getThread($alRet);
@@ -258,6 +258,11 @@ class PostmarkMessage extends DataObject {
 
 	public function getCountString(){
 		return $this->CountUnreadMessage() . '/' . $this->CountMessages();
+	}
+
+	public function updateAsRead(){
+		$this->Read = 1;
+		$this->write();
 	}
 
 } 
