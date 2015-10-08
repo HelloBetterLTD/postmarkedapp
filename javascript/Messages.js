@@ -12,8 +12,8 @@
         }
         var dialog = popup.dialog({
             autoOpen: false,
-            height: 500,
-            width: 600,
+            height: 550,
+            width: 700,
             modal: true
         });
 
@@ -78,7 +78,7 @@
                         method  : 'POST',
                         type    : 'POST',
                         success : function(){
-                            form[0].reset();
+                            form.hide();
                             form.before('<p class="message js-message">Email sent successfully</p>');
                         }
                     });

@@ -12,8 +12,8 @@
         }
         var dialog = popup.dialog({
             autoOpen: false,
-            height: 500,
-            width: 600,
+            height: 550,
+            width: 700,
             modal: true
         });
 

@@ -32,6 +32,12 @@ class CustomerSearchContext extends SearchContext {
 			CheckboxSetField::create('Tags')->setSource(CustomerTag::get()->map()->toArray())
 		);
 
+		$locales = PostmarkHelper::MemberLocales();
+		if($locales && count($locales)){
+			$locale = DropdownField::create('Locale')->setSource($locales)->setEmptyString('Select language');
+			$fields->insertBefore($locale, 'Name');
+		}
+
 		$this->extend('updateCustomerSearchFields', $fields);
 
 		$this->fields = $fields;
@@ -53,6 +59,10 @@ class CustomerSearchContext extends SearchContext {
 		$query = $dataList->dataQuery();
 
 		if(!is_object($searchParams)){
+
+			if(isset($params['Locale']) && !empty($params['Locale'])){
+				$query->where('"Locale" = \'' . Convert::raw2sql($params['Locale']) . '\'');
+			}
 
 			if(isset($params['Name']) && !empty($params['Name'])){
 				$query->where('"FirstName" LIKE \'%' . Convert::raw2sql($params['Name']) . '%\' OR "Surname" LIKE \'%' . Convert::raw2sql($params['Name']) . '%\'');

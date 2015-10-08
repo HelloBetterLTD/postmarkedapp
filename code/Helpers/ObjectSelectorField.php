@@ -20,6 +20,7 @@ class ObjectSelectorField extends FormField {
 
 	public function Field($properties = array()) {
 		Requirements::javascript('silverstripe-postmarked/javascript/ObjectSelectorField.js');
+		Requirements::css('silverstripe-postmarked/css/ObjectSelectorField.css');
 		return parent::Field($properties);
 	}
 

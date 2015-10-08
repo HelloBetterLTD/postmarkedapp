@@ -23,7 +23,7 @@
                         'filter' : text
                     },
                     success    : function(data){
-                        suggesters.html('');
+                        suggesters.html('').show();
                         if(data){
                             for(var key in data){
 
