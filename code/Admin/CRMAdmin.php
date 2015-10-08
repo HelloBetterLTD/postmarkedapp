@@ -53,7 +53,7 @@ class CRMAdmin extends ModelAdmin {
 					'Company'				=> _t('CRMAdmin.Company', 'Company'),
 					'getTagCollection'		=> _t('CRMAdmin.Tags', 'Tags'),
 					'getStatusCollection'	=> _t('CRMAdmin.Status', 'Status'),
-					'getNotifications'		=> _t('CRMAdmin.Notifications', 'Notifications')
+					'getUnreadMessages'		=> _t('CRMAdmin.UnreadMessages', 'Unread messages')
 				);
 
 
