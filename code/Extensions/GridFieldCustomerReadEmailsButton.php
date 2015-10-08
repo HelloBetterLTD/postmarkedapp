@@ -33,8 +33,9 @@ class GridFieldCustomerReadEmailsButton implements GridField_ColumnProvider {
 	public function getColumnContent($gridField, $record, $columnName) {
 		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/GridFieldCustomerReadEmailsButton.css');
 		$link = Director::baseURL() . 'admin/messages?q[Search]=' . $record->Email;
+		$text = _t('CRMAdmin.ReadEmails', 'Read Emails');
 		return <<<HTML
-<a class="action action-detail read-more-link" href="$link" title="<% _t('GridFieldEditButton_ss.EDIT', 'Edit') %>"></a>
+<a class="action action-detail read-more-link icon-open_in_new" href="$link" title="$text"></a>
 
 HTML;
 

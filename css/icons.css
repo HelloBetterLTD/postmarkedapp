@@ -19,24 +19,28 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.icon-open_in_new:before {
+    content: "\e800";
+}
 .icon-mail-reply-all:before {
-  content: "\e605";
+    content: "\e605";
 }
 .icon-mail-reply:before {
-  content: "\e606";
+    content: "\e606";
 }
 .icon-close:before {
-  content: "\e604";
+    content: "\e604";
 }
 .icon-envelope:before {
-  content: "\e600";
+    content: "\e600";
 }
 .icon-envelope-2:before {
-  content: "\e601";
+    content: "\e601";
 }
 .icon-down:before {
-  content: "\e602";
+    content: "\e602";
 }
 .icon-up:before {
-  content: "\e603";
+    content: "\e603";
 }
+
