@@ -45,14 +45,21 @@ class CRMAdmin extends ModelAdmin {
 				$status->setFromClass($this->modelClass)->setRelationship('Statuses')->setTitle(_t('CRMAdmin.Status', 'Status'));
 
 				$columns = $configs->getComponentByType('GridFieldDataColumns');
-				$columns->setDisplayFields(array(
-					'getFullName'			=> 'Name',
-					'Email'					=> 'Email',
-					'Company'				=> 'Company',
-					'getTagCollection'		=> 'Tags',
-					'getStatusCollection'	=> 'Status',
-					'getNotifications'		=> 'Notifications'
-				));
+
+
+				$arrColumns = array(
+					'getFullName'			=> _t('CRMAdmin.Name', 'Name'),
+					'Email'					=> _t('CRMAdmin.Email', 'Email'),
+					'Company'				=> _t('CRMAdmin.Company', 'Company'),
+					'getTagCollection'		=> _t('CRMAdmin.Tags', 'Tags'),
+					'getStatusCollection'	=> _t('CRMAdmin.Status', 'Status'),
+					'getNotifications'		=> _t('CRMAdmin.Notifications', 'Notifications')
+				);
+
+
+				$this->extend('updateCustomerGridColumns', $arrColumns);
+
+				$columns->setDisplayFields($arrColumns);
 
 				$configs->removeComponentsByType('GridFieldExportButton');
 				$configs->removeComponentsByType('GridFieldPrintButton');

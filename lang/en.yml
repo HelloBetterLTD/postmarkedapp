@@ -6,3 +6,7 @@ en:
     StartTyping: 'Start typing to select items'
     Add: 'Add'
     Remove: 'Remove'
+    Name: 'Name'
+    Email: 'Email'
+    Company: 'Company'
+    Notifications: 'Notifications'
