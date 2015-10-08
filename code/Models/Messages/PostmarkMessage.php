@@ -33,12 +33,21 @@ class PostmarkMessage extends DataObject {
 	);
 
 	private static $summary_fields = array(
+		'On'				=> 'LastUpdateTime',
 		'Subject',
-		'From'	=> 'FromEmail',
+		'From'				=> 'FromEmail',
 		'To'
 	);
 
+	private static $casting = array(
+		'getLastUpdateTime'	=> 'HTMLVarchar'
+	);
 
+
+	public function getLastUpdateTime(){
+		$lastEdited = $this->dbObject('LastEdited');
+		return $lastEdited->Ago(true);
+	}
 
 
 	public function onBeforeDelete(){

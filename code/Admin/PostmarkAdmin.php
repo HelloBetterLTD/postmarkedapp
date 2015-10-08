@@ -46,6 +46,8 @@ class PostmarkAdmin extends ModelAdmin {
 				$editForm = $configs->getComponentByType('GridFieldDetailForm');
 				$editForm->setItemRequestClass('PostmarkMessageGridFieldDetailForm_ItemRequest');
 
+				$configs->addComponent(new GridFieldMessageStatusColumn(), 'GridFieldDataColumns');
+
 			}
 
 		}
