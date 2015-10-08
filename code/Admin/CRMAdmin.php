@@ -36,6 +36,7 @@ class CRMAdmin extends ModelAdmin {
 
 				$configs = $grid->getConfig();
 				$configs->addComponent(new GridFieldPostmarkMessageButton());
+				$configs->addComponent(new GridFieldCustomerReadEmailsButton());
 				$configs->addComponent(new GridFieldSelectRecord(), 'GridFieldDataColumns');
 				$configs->addComponent($tags = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
 				$tags->setFromClass($this->modelClass)->setRelationship('Tags')->setTitle(_t('CRMAdmin.Tags', 'Tags'));
