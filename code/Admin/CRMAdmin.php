@@ -54,6 +54,9 @@ class CRMAdmin extends ModelAdmin {
 					'getNotifications'		=> 'Notifications'
 				));
 
+				$configs->removeComponentsByType('GridFieldExportButton');
+				$configs->removeComponentsByType('GridFieldPrintButton');
+
 			}
 		}
 
