@@ -78,7 +78,7 @@
                         method  : 'POST',
                         type    : 'POST',
                         success : function(){
-                            form[0].reset();
+                            form.hide();
                             form.before('<p class="message js-message">Email sent successfully</p>');
                         }
                     });
