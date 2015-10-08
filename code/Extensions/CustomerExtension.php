@@ -41,7 +41,7 @@ class CustomerExtension extends DataExtension {
 		}
 	}
 
-	public function getNotifications(){
+	public function getUnreadMessages(){
 		$list = PostmarkMessage::get()->filter(array(
 			'FromCustomerID'		=> $this->owner->ID,
 			'Read'					=> 0

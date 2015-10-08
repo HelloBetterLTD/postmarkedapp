@@ -38,21 +38,36 @@ class CRMAdmin extends ModelAdmin {
 				$configs->addComponent(new GridFieldPostmarkMessageButton());
 				$configs->addComponent(new GridFieldSelectRecord(), 'GridFieldDataColumns');
 				$configs->addComponent($tags = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
-				$tags->setFromClass($this->modelClass)->setRelationship('Tags')->setTitle('Tags');
+				$tags->setFromClass($this->modelClass)->setRelationship('Tags')->setTitle(_t('CRMAdmin.Tags', 'Tags'));
 
 
 				$configs->addComponent($status = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
-				$status->setFromClass($this->modelClass)->setRelationship('Statuses')->setTitle('Status');
+				$status->setFromClass($this->modelClass)->setRelationship('Statuses')->setTitle(_t('CRMAdmin.Status', 'Status'));
 
 				$columns = $configs->getComponentByType('GridFieldDataColumns');
-				$columns->setDisplayFields(array(
-					'getFullName'			=> 'Name',
-					'Email'					=> 'Email',
-					'Company'				=> 'Company',
-					'getTagCollection'		=> 'Tags',
-					'getStatusCollection'	=> 'Status',
-					'getNotifications'		=> 'Notifications'
-				));
+
+
+				$arrColumns = array(
+					'getFullName'			=> _t('CRMAdmin.Name', 'Name'),
+					'Email'					=> _t('CRMAdmin.Email', 'Email'),
+					'Company'				=> _t('CRMAdmin.Company', 'Company'),
+					'getTagCollection'		=> _t('CRMAdmin.Tags', 'Tags'),
+					'getStatusCollection'	=> _t('CRMAdmin.Status', 'Status'),
+					'getUnreadMessages'		=> _t('CRMAdmin.UnreadMessages', 'Unread messages')
+				);
+
+
+				$this->extend('updateCustomerGridColumns', $arrColumns);
+
+				$columns->setDisplayFields($arrColumns);
+
+				$configs->removeComponentsByType('GridFieldExportButton');
+				$configs->removeComponentsByType('GridFieldPrintButton');
+
+				$addButton = $configs->getComponentByType('GridFieldAddNewButton');
+				if($addButton){
+					$addButton->setButtonName(_t('CRMAdmin.AddCustomerButton', 'Add Customer'));
+				}
 
 			}
 		}

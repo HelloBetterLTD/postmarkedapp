@@ -3,7 +3,7 @@
     <label class="tab-title {$Relationship}" data-tab="tab-{$Relationship}">{$Title}</label>
 
 		<div id="tab-{$Relationship}" class="tab-content">
-            <p>Start typing to select items: </p>
+            <p><%t CRMAdmin.StartTyping "Start typing to select items" %>:</p>
     		{$ObjectSelectorField}
 
 			<div class="tab-buttons">
@@ -12,7 +12,7 @@
 	    		</a>
 
 	    		<a href="{$RemoveLink}" class="ss-ui-action-constructive ss-ui-button ui-button ui-widget ui-state-default ui-corner-all grid-field-bulk-op remove-from-relation">
-	        		Remove
+                    <%t CRMAdmin.Remove "Remove" %>
 	    		</a>
 			</div>
 	</div>

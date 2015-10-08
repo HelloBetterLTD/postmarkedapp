@@ -90,7 +90,7 @@ class GridFieldManageBulkRelationships
 		Requirements::javascript(POSTMARK_RELATIVE_PATH . '/javascript/GridFieldManageBulkRelationships.js');
 		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/GridFieldManageBulkRelationships.css');
 		if(!$this->buttonName) {
-			$this->buttonName = 'Add';
+			$this->buttonName = _t('CRMAdmin.Add', 'Add');
 		}
 
 		$sourceObject = $this->getSourceObject();
