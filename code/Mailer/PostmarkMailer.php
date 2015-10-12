@@ -95,10 +95,11 @@ class PostmarkMailer extends Mailer {
 
 				if(is_array($customerIDs) && !empty($customerIDs) && self::$record_emails){
 					$postmarkAttachment = new Attachment(array(
-						'Content'				=> base64_encode($attachment['filename']),
+						'Content'				=> base64_encode($attachment['contents']),
 						'FileName'				=> $attachment['filename'],
 						'ContentType'			=> $attachment['mimetype'],
-						'PostmarkMessageID'		=> $message->ID
+						'PostmarkMessageID'		=> $message->ID,
+						'Length'				=> strlen($attachment['contents'])
 					));
 					$postmarkAttachment->write();
 				}

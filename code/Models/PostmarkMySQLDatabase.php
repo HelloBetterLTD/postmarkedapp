@@ -18,4 +18,8 @@ class PostmarkMySQLDatabase extends MySQLDatabase {
 		return 'blob';
 	}
 
+	public function longblob($values){
+		return 'longblob';
+	}
+
 } 

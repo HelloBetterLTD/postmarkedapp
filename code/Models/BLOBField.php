@@ -16,7 +16,7 @@ class BLOBField extends DBField {
 		);
 
 		$values= array(
-			'type' => 'blob',
+			'type' => 'longblob',
 			'parts' => $parts
 		);
 
