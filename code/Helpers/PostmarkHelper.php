@@ -23,6 +23,17 @@ class PostmarkHelper extends Object {
 		return self::client_list()->filter('Email', $email)->first();
 	}
 
+	public static function find_or_make_client($email){
+		$client = self::find_client_by_email($email);
+		if(!$client){
+			$dataType = Config::inst()->get('PostmarkAdmin', 'member_class');
+			$client = new $dataType();
+			$client->Email = $email;
+			$client->write();
+		}
+		return $client;
+	}
+
 	public static function find_client_emails($ids){
 		$list = self::client_list()->filter('ID', $ids);
 		if($list->count()){
