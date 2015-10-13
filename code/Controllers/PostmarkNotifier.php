@@ -35,35 +35,34 @@ class PostmarkNotifier extends Controller {
 				'MessageHash'		=> $hashParts[1]
 			))->first();
 
-			if($lastMessage){
 
-				$fromCustomer = PostmarkHelper::find_client_by_email($arrResponse['From']);
+			$fromCustomer = PostmarkHelper::find_or_make_client($arrResponse['From']);
 
-				$message = new PostmarkMessage(array(
-					'Subject'			=> $arrResponse['Subject'],
-					'Message'			=> $arrResponse['HtmlBody'],
-					'ToID'				=> 0,
-					'MessageID'			=> $arrResponse['MessageID'],
-					'InReplyToID'		=> $lastMessage->ID,
-					'FromCustomerID'	=> $fromCustomer ? $fromCustomer->ID : 0
-				));
-				$message->write();
+			$message = new PostmarkMessage(array(
+				'Subject'			=> $arrResponse['Subject'],
+				'Message'			=> $arrResponse['HtmlBody'],
+				'ToID'				=> 0,
+				'MessageID'			=> $arrResponse['MessageID'],
+				'InReplyToID'		=> $lastMessage ? $lastMessage->ID : 0,
+				'FromCustomerID'	=> $fromCustomer ? $fromCustomer->ID : 0
+			));
+			$message->write();
 
-				if(isset($arrResponse['Attachments']) && count($arrResponse['Attachments'])){
-					foreach($arrResponse['Attachments'] as $attachment){
-						$attachmentObject = new Attachment(array(
-							'Content'				=> $attachment['Content'],
-							'FileName'				=> $attachment['Name'],
-							'ContentType'			=> $attachment['ContentType'],
-							'Length'				=> $attachment['ContentLength'],
-							'ContentID'				=> $attachment['ContentID'],
-							'PostmarkMessageID'		=> $message->ID
-						));
-						$attachmentObject->write();
-					}
+			if(isset($arrResponse['Attachments']) && count($arrResponse['Attachments'])){
+				foreach($arrResponse['Attachments'] as $attachment){
+					$attachmentObject = new Attachment(array(
+						'Content'				=> $attachment['Content'],
+						'FileName'				=> $attachment['Name'],
+						'ContentType'			=> $attachment['ContentType'],
+						'Length'				=> $attachment['ContentLength'],
+						'ContentID'				=> $attachment['ContentID'],
+						'PostmarkMessageID'		=> $message->ID
+					));
+					$attachmentObject->write();
 				}
-
 			}
+
+
 
 		}catch(Exception $e){ }
 

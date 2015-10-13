@@ -56,6 +56,9 @@ class PostmarkMailer extends Mailer {
 		if(empty($signature)){
 			$signature = PostmarkSignature::get()->filter('Email', $from)->first();
 		}
+		if(!$signature){
+			$signature = PostmarkSignature::get()->filter('IsDefault', 1)->first();
+		}
 
 		$client = new PostmarkClient(SiteConfig::current_site_config()->PostmarkToken);
 
@@ -80,8 +83,9 @@ class PostmarkMailer extends Mailer {
 		if (isset($customheaders['cc'])) { $cc = $customheaders['cc']; unset($customheaders['cc']); }
 
 		$bcc = null;
-		if (isset($customheaders['BCC'])) { $bcc = $customheaders['BCC']; unset($customheaders['BCC']); }
-		if (isset($customheaders['bcc'])) { $cc = $customheaders['bcc']; unset($customheaders['bcc']); }
+		if (isset($customheaders['Bcc'])) { $bcc = $customheaders['Bcc']; unset($customheaders['Bcc']); }
+		if (isset($customheaders['BCC'])) { $bcc = $customheaders['bcc']; unset($customheaders['BCC']); }
+		if (isset($customheaders['bcc'])) { $bcc = $customheaders['bcc']; unset($customheaders['bcc']); }
 
 		$attachments = null;
 		if($attachedFiles && is_array($attachedFiles)){
@@ -95,10 +99,11 @@ class PostmarkMailer extends Mailer {
 
 				if(is_array($customerIDs) && !empty($customerIDs) && self::$record_emails){
 					$postmarkAttachment = new Attachment(array(
-						'Content'				=> base64_encode($attachment['filename']),
+						'Content'				=> base64_encode($attachment['contents']),
 						'FileName'				=> $attachment['filename'],
 						'ContentType'			=> $attachment['mimetype'],
-						'PostmarkMessageID'		=> $message->ID
+						'PostmarkMessageID'		=> $message->ID,
+						'Length'				=> strlen($attachment['contents'])
 					));
 					$postmarkAttachment->write();
 				}
@@ -117,7 +122,7 @@ class PostmarkMailer extends Mailer {
 		}
 
 		$sendResult = $client->sendEmail(
-			$from,
+			$signature ? $signature->Email : $from,
 			$to,
 			$subject,
 			$htmlContent,

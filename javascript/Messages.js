@@ -51,6 +51,16 @@
                 }
                 else{
                     message.addClass('ex').removeClass('collapsed').find('.message-contents').show();
+                    if(this.data('id') && this.data('readlink')){
+                        $.ajax({
+                            url         : this.data('readlink'),
+                            data        : {
+                                m       : this.data('id')
+                            },
+                            method      : 'GET',
+                            type        : 'GET'
+                        });
+                    }
                 }
                 e.preventDefault();
 

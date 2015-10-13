@@ -12,7 +12,8 @@ class PostmarkSignature extends DataObject {
 	private static $db = array(
 		'Name'				=> 'Varchar(100)',
 		'Email'				=> 'Varchar(100)',
-		'IsActive'			=> 'Boolean'
+		'IsActive'			=> 'Boolean',
+		'IsDefault'			=> 'Boolean'
 	);
 
 	private static $summary_fields = array(
