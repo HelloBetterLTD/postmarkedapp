@@ -1,3 +1,6 @@
+.cms table.ss-gridfield-table tbody td.col-buttons {
+  min-width: 125px;
+}
 table.ss-gridfield-table tbody td button.gird-field-message {
   outline: none;
   -webkit-appearance: none;
