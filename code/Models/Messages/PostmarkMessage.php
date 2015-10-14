@@ -281,6 +281,7 @@ class PostmarkMessage extends DataObject {
 			$strContents = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $strContents);
 			$strContents = preg_replace('#<style(.*?)>(.*?)</style>#is', '', $strContents);
 			$strContents = preg_replace('#<link(.*?)>#is', '', $strContents);
+			$strContents = preg_replace('#<base(.*?)>#is', '', $strContents);
 
 			$strContents = trim($strContents);
 		}
