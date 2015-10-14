@@ -38,13 +38,28 @@ class PostmarkNotifier extends Controller {
 
 			$fromCustomer = PostmarkHelper::find_or_make_client($arrResponse['From']);
 
+			$inboundSignature = null;
+			if($lastMessage){
+				$inboundSignature = $lastMessage->From();
+			}
+			else if(!$lastMessage && isset($arrResponse['To'])){
+				$inboundSignature = PostmarkSignature::get('Email', $arrResponse['To'])->first();
+			}
+
+			if(!$inboundSignature){
+				$inboundSignature = PostmarkSignature::get('IsDefault', 1)->first();
+			}
+
+
+
 			$message = new PostmarkMessage(array(
 				'Subject'			=> $arrResponse['Subject'],
 				'Message'			=> $arrResponse['HtmlBody'],
 				'ToID'				=> 0,
 				'MessageID'			=> $arrResponse['MessageID'],
 				'InReplyToID'		=> $lastMessage ? $lastMessage->ID : 0,
-				'FromCustomerID'	=> $fromCustomer ? $fromCustomer->ID : 0
+				'FromCustomerID'	=> $fromCustomer ? $fromCustomer->ID : 0,
+				'InboundTo'			=> $inboundSignature ? $inboundSignature->ID : 0
 			));
 			$message->write();
 

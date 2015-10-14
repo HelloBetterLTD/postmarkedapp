@@ -26,6 +26,7 @@ class PostmarkMessage extends DataObject {
 	private static $has_one = array(
 		'InReplyTo'			=> 'PostmarkMessage',
 		'From'				=> 'PostmarkSignature',
+		'InboundTo'			=> 'PostmarkSignature'
 	);
 
 	private static $has_many = array(
@@ -174,6 +175,10 @@ class PostmarkMessage extends DataObject {
 	}
 
 	public function getTo(){
+		if($this->InboundToID){
+			return $this->InboundTo()->Email;
+		}
+
 		$arrEmails = array();
 		$arrIDs = explode(',', $this->ToID);
 		foreach($arrIDs as $iID){
