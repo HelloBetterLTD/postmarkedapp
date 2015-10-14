@@ -272,10 +272,16 @@ class PostmarkMessage extends DataObject {
 
 	public function MessageDisplay(){
 		$strContents = $this->Message;
-		if(strpos($strContents, '<body>') !== false && strpos($strContents, '</body>')){
+		if(strpos($strContents, '<body') !== false && strpos($strContents, '</body>')){
 
-			$strContents = substr($strContents, strpos($strContents, '<body') + 6);
+			$iEndOfBody = strpos($strContents, '>', strpos($strContents, '<body')) + 1;
+			$strContents = substr($strContents, $iEndOfBody);
 			$strContents = substr($strContents, 0, strpos($strContents, '</body>'));
+
+			$strContents = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $strContents);
+			$strContents = preg_replace('#<style(.*?)>(.*?)</style>#is', '', $strContents);
+			$strContents = preg_replace('#<link(.*?)>#is', '', $strContents);
+
 			$strContents = trim($strContents);
 		}
 
