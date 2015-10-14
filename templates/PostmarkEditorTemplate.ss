@@ -16,9 +16,11 @@
 
     <div class="cms-content-fields center <% if not $Fields.hasTabset %>cms-panel-padded<% end_if %>">
         <% with $Controller.getRecord %>
+
             <div class="messages-holder">
             <% loop $Thread %>
                 <div class="message-item {$FirstLast} <% if $Last %>$updateAsRead<% end_if %>">
+
                     <div class="message-header" <% if not $Read %>data-readlink="{$Up.Up.ReadLink('read')}" data-id="{$ID}"<% end_if %>>
                         <div class="message-image">
                             <img src="silverstripe-postmarked/images/icons/user.png">
@@ -40,9 +42,10 @@
 
 
                     </div>
+
                     <div class="message-contents">
                         <div class="message-body">
-                            {$Message}
+                            {$MessageDisplay}
                         </div>
                         <% if $Attachments %>
                             <div class="message-attachments">

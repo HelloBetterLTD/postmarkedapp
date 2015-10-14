@@ -265,4 +265,16 @@ class PostmarkMessage extends DataObject {
 		$this->write();
 	}
 
+	public function MessageDisplay(){
+		$strContents = $this->Message;
+		if(strpos($strContents, '<body>') !== false && strpos($strContents, '</body>')){
+
+			$strContents = substr($strContents, strpos($strContents, '<body') + 6);
+			$strContents = substr($strContents, 0, strpos($strContents, '</body>'));
+			$strContents = trim($strContents);
+		}
+
+		return $strContents;
+	}
+
 } 
