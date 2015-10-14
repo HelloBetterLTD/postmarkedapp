@@ -12,7 +12,7 @@ use Postmark\PostmarkClient;
 class PostmarkAdmin extends ModelAdmin {
 
 	private static $url_segment = 'messages';
-	private static $menu_title = 'Messages';
+	private static $menu_title = 'Conversations';
 	private static $menu_icon = '/silverstripe-postmarked/images/icons/post.png';
 
 	private static $managed_models = array(
