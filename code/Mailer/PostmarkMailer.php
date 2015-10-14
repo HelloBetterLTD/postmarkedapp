@@ -141,6 +141,8 @@ class PostmarkMailer extends Mailer {
 			$message->write();
 		}
 
+
+		return $sendResult->__get('message') == 'OK';
 	}
 
 } 
