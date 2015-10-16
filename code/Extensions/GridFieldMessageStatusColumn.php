@@ -39,6 +39,10 @@ class GridFieldMessageStatusColumn implements GridField_ColumnProvider {
 			$strIcon = 'icon-envelope unread-message';
 		}
 
+		if($record->hasNotResponded()){
+			$strIcon .= ' has-not-responded';
+		}
+
 		return '<span class="action thread-detail"><span class="message-status-icon ' . $strIcon . '"></span>' . $record->getCountString() . '</span>';
 
 	}

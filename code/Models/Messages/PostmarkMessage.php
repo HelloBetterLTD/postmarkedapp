@@ -9,6 +9,8 @@
 
 class PostmarkMessage extends DataObject {
 
+	private static $message_responded_days = 2;
+
 	private static $db = array(
 		'Subject'			=> 'Varchar(500)',
 		'Message'			=> 'HTMLText',
@@ -234,6 +236,23 @@ class PostmarkMessage extends DataObject {
 				return true;
 			}
 		}
+		return false;
+	}
+
+	public function hasNotResponded(){
+		$iMaxDays = Config::inst()->get('PostmarkMessage', 'message_responded_days');
+		if($this->FromID){
+			$days = (strtotime(SS_Datetime::now()) - strtotime($this->LastEdited)) / 86400;
+			if($days > $iMaxDays){
+				return true;
+			}
+		}
+		foreach($this->Children() as $child){
+			if($child->hasNotResponded()){
+				return true;
+			}
+		}
+
 		return false;
 	}
 

@@ -103,7 +103,12 @@ class PostmarkAdmin extends ModelAdmin {
 					<h4>Merge Values</h4>
 					<div class="contents">' . $mergeText . '</div>
 				</div>'),
-				HiddenField::create('InReplyToID')->setValue(isset($_REQUEST['ReplyToMessageID']) ? $_REQUEST['ReplyToMessageID'] : 0)
+				HiddenField::create('InReplyToID')->setValue(isset($_REQUEST['ReplyToMessageID']) ? $_REQUEST['ReplyToMessageID'] : 0),
+				FileField::create('Attachment_1', 'Attachment One'),
+				FileField::create('Attachment_2', 'Attachment Two'),
+				FileField::create('Attachment_3', 'Attachment Three'),
+				FileField::create('Attachment_4', 'Attachment Four'),
+				FileField::create('Attachment_5', 'Attachment Five')
 			)),
 			new FieldList(FormAction::create('postmessage', 'Sent Message')
 		));
@@ -148,6 +153,13 @@ class PostmarkAdmin extends ModelAdmin {
 				$data['Subject'],
 				PostmarkHelper::MergeEmailText($data['Body'], $client)
 			);
+
+			for($i = 1; $i <= 5; $i+=1){
+				$strKey = 'Attachment_' . $i;
+				if(isset($_FILES[$strKey]) && $_FILES[$strKey]['tmp_name']){
+					$email->attachFileFromString(file_get_contents($_FILES[$strKey]['tmp_name']), $_FILES[$strKey]['name']);
+				}
+			}
 
 
 			$this->extend('updatePostmessage', $email, $data);

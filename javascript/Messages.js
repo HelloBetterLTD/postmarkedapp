@@ -75,7 +75,7 @@
                 e.preventDefault();
                 var form = $(this);
                 var action = form.attr('action');
-                var data = form.serializeArray();
+                var data = new FormData(this[0]);
 
                 form.parent().find('.js-message').remove();
 
@@ -85,6 +85,10 @@
                     $.ajax({
                         url     : action,
                         data    : data,
+                        async   : false,
+                        cache   : false,
+                        contentType: false,
+                        processData: false,
                         method  : 'POST',
                         type    : 'POST',
                         success : function(){

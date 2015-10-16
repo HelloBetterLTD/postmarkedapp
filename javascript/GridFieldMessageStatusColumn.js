@@ -13,6 +13,14 @@
             }
         });
 
+        var no_response_messages = '.has-not-responded';
+
+        $(no_response_messages).entwine({
+            onmatch: function(){
+                $(this).closest('tr').addClass('no-response-highlight');
+            }
+        });
+
 
 
     });
