@@ -157,7 +157,10 @@ class PostmarkAdmin extends ModelAdmin {
 			for($i = 1; $i <= 5; $i+=1){
 				$strKey = 'Attachment_' . $i;
 				if(isset($_FILES[$strKey]) && $_FILES[$strKey]['tmp_name']){
-					$email->attachFileFromString(file_get_contents($_FILES[$strKey]['tmp_name']), $_FILES[$strKey]['name']);
+					$contents = file_get_contents($_FILES[$strKey]['tmp_name']);
+					if(strlen($contents)){
+						$email->attachFileFromString($contents, $_FILES[$strKey]['name']);
+					}
 				}
 			}
 
