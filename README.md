@@ -25,5 +25,5 @@ See the following documents.
 ## Admin screens
 
 ![CRM Admin](/docs/images/crm-admin.png)
-![Settings Admin]('/docs/images/postmark-settings.png)
+![Settings Admin](/docs/images/postmark-settings.png)
 
