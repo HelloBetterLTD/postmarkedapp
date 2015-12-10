@@ -13,11 +13,17 @@ The out of the box key features include
 7. Get notified when your system receives an email from a client.
 8. Store email attachments in the database as blobs
 
+## Installation 
+
+See the following documents. 
+
+* [Installing]('/docs/en/installing.md')
+* [Registering / Creating postmarked](/docs/en/postmarked.md)
+* [Email signatures and settings](/docs/en/signatures.md)
+* [Emailing]('/docs/en/emailing.md')
+
 ## Admin screens
 
 ![CRM Admin](/docs/images/crm-admin.png)
-
-_CRM Admin_
-
-
+![Settings Admin]('/docs/images/postmark-settings.png)
 
