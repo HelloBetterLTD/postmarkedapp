@@ -8,7 +8,7 @@ To read more follow this link. http://developer.postmarkapp.com/developer-proces
 
 When you visit the server's settings tab it will look like this.
 
-![Server](/../images/postmark-server.png)
+![Server](/docs/images/postmark-server.png)
 
 ### Settings up the the inbound addresses.
 
@@ -20,7 +20,7 @@ record and assign to an email thread depending on the hash keys.
 
 Below is a screen shot of the inbound email servers.
 
-![Inbound servers](/../images/inbound-servers.png)
+![Inbound servers](/docs/images/inbound-servers.png)
 
 http://yoursite.com/postmark-notifier
 
@@ -30,7 +30,7 @@ After settings up the inbound addresses etc, you need to set up the credentials.
 
 Follow the credentials tab for your server
 
-![Credentials](/../images/credentials.png)
+![Credentials](/docs/images/credentials.png)
 
 Now go to your site's CMS, Settings tab and you will there are fields to enter the postmark token and the inbound email address.
 
@@ -38,4 +38,4 @@ Now go to your site's CMS, Settings tab and you will there are fields to enter t
 
 Once thats being done, you have to add sender signatures to the postmark. As well as for your CMS.
 
-When all of these items are done you are all set to use the module. 
+When all of these items are done you are all set to use the module.
