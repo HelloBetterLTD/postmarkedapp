@@ -17,7 +17,7 @@ The out of the box key features include
 
 See the following documents. 
 
-* [Installing]('/docs/en/installing.md')
+* [Installing](/docs/en/installing.md)
 * [Registering / Creating postmarked](/docs/en/postmarked.md)
 * [Email signatures and settings](/docs/en/signatures.md)
 * [Emailing]('/docs/en/emailing.md')
