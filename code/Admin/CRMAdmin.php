@@ -11,7 +11,7 @@ class CRMAdmin extends ModelAdmin {
 
 	private static $url_segment = 'crm';
 	private static $menu_title = 'CRM';
-	private static $menu_icon = '/silverstripe-postmarked/images/icons/crm.png';
+	private static $menu_icon = 'silverstripe-postmarked/images/icons/crm.png';
 
 	private static $managed_models = array(
 		'CustomerTag',
@@ -35,9 +35,9 @@ class CRMAdmin extends ModelAdmin {
 			if($grid){
 
 				$configs = $grid->getConfig();
+
 				$configs->addComponent(new GridFieldPostmarkMessageButton());
 				$configs->addComponent(new GridFieldCustomerReadEmailsButton());
-				$configs->addComponent(new GridFieldSelectRecord(), 'GridFieldDataColumns');
 				$configs->addComponent($tags = new GridFieldManageBulkRelationships('before'), 'GridFieldAddNewButton');
 				$tags->setFromClass($this->modelClass)->setRelationship('Tags')->setTitle(_t('CRMAdmin.Tags', 'Tags'));
 
@@ -69,6 +69,7 @@ class CRMAdmin extends ModelAdmin {
 				if($addButton){
 					$addButton->setButtonName(_t('CRMAdmin.AddCustomerButton', 'Add Customer'));
 				}
+
 
 			}
 		}

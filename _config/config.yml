@@ -6,6 +6,13 @@ SiteConfig:
     - PostmarkExtension
 PostmarkAdmin:
   member_class: 'Member'
+Injector:
+  MySQLDatabase:
+    class: 'PostmarkMySQLDatabase'
+    properties:
+      connector: %$MySQLiConnector
+      schemaManager: %$PostmarkMySQLSchemaManager
+      queryBuilder: %$MySQLQueryBuilder
 Director:
   rules:
     'postmark-notifier//$Action/$ID/$OtherID'          : 'PostmarkNotifier',
