@@ -8,7 +8,11 @@ To read more follow this link. http://developer.postmarkapp.com/developer-proces
 
 When you visit the server's settings tab it will look like this.
 
-![Server](/docs/images/postmark-server.png)
+Follow this link to add a new server
+
+https://postmarkapp.com/servers/new
+
+
 
 ### Settings up the the inbound addresses.
 
