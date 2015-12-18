@@ -7,12 +7,12 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CustomerTag extends DataObject {
+class CustomerTag extends DataObject
+{
 
-	private static $db = array(
-		'Title'				=> 'Varchar'
-	);
+    private static $db = array(
+        'Title'                => 'Varchar'
+    );
 
-	private static $default_sort = 'Title';
-
-} 
+    private static $default_sort = 'Title';
+}

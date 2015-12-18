@@ -7,31 +7,31 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class MessageSearchContext extends SearchContext {
+class MessageSearchContext extends SearchContext
+{
 
 
-	public function __construct($modelClass, $fields = null, $filters = null) {
+    public function __construct($modelClass, $fields = null, $filters = null)
+    {
+        $fields = new FieldList(
+            TextField::create('Search')->setAttribute('placeholder', 'Email, Subject, Name')
+        );
 
-		$fields = new FieldList(
-			TextField::create('Search')->setAttribute('placeholder', 'Email, Subject, Name')
-		);
-
-		$filters = array();
-		parent::__construct($modelClass, $fields, $filters);
-	}
+        $filters = array();
+        parent::__construct($modelClass, $fields, $filters);
+    }
 
 
-	public function getQuery($searchParams, $sort = false, $limit = false, $existingQuery = null) {
-
-		$dataList = parent::getQuery($searchParams, $sort, $limit, $existingQuery);
-		$params = is_object($searchParams) ? $searchParams->getVars() : $searchParams;
-		$query = $dataList->dataQuery();
-		if(!is_object($searchParams)){
-
-			if(isset($params['Search']) && !empty($params['Search'])){
-				$customerClass = Config::inst()->get('PostmarkAdmin', 'member_class');
-				$strFilter = "'%" . Convert::raw2sql($params['Search']) . "%'";
-				$query->where("
+    public function getQuery($searchParams, $sort = false, $limit = false, $existingQuery = null)
+    {
+        $dataList = parent::getQuery($searchParams, $sort, $limit, $existingQuery);
+        $params = is_object($searchParams) ? $searchParams->getVars() : $searchParams;
+        $query = $dataList->dataQuery();
+        if (!is_object($searchParams)) {
+            if (isset($params['Search']) && !empty($params['Search'])) {
+                $customerClass = Config::inst()->get('PostmarkAdmin', 'member_class');
+                $strFilter = "'%" . Convert::raw2sql($params['Search']) . "%'";
+                $query->where("
 					Subject LIKE $strFilter
 					OR Message LIKE $strFilter
 					OR FromCustomerID IN ( SELECT ID FROM $customerClass WHERE
@@ -46,12 +46,9 @@ class MessageSearchContext extends SearchContext {
 				 	)
 
 				");
-			}
+            }
+        }
 
-		}
-
-		return $dataList->setDataQuery($query);
-
-	}
-
-} 
+        return $dataList->setDataQuery($query);
+    }
+}

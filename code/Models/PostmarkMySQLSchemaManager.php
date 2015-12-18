@@ -7,21 +7,23 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class PostmarkMySQLSchemaManager extends MySQLSchemaManager {
+class PostmarkMySQLSchemaManager extends MySQLSchemaManager
+{
 
-	/**
-	 * Identifier for this schema, used for configuring schema-specific table
-	 * creation options
-	 */
-	const ID = 'PostmarkMySQLDatabase';
+    /**
+     * Identifier for this schema, used for configuring schema-specific table
+     * creation options
+     */
+    const ID = 'PostmarkMySQLDatabase';
 
 
-	public function blob($values){
-		return 'blob';
-	}
+    public function blob($values)
+    {
+        return 'blob';
+    }
 
-	public function longblob($values){
-		return 'longblob';
-	}
-
-} 
+    public function longblob($values)
+    {
+        return 'longblob';
+    }
+}

@@ -7,305 +7,326 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class PostmarkMessage extends DataObject {
+class PostmarkMessage extends DataObject
+{
 
-	private static $message_responded_days = 2;
+    private static $message_responded_days = 2;
 
-	private static $db = array(
-		'Subject'			=> 'Varchar(500)',
-		'Message'			=> 'HTMLText',
-		'PlainMessage'		=> 'Text',
-		'ToID'				=> 'Text',
-		'FromCustomerID'	=> 'Int',
-		'MessageID'			=> 'Varchar(100)',
+    private static $db = array(
+        'Subject'            => 'Varchar(500)',
+        'Message'            => 'HTMLText',
+        'PlainMessage'        => 'Text',
+        'ToID'                => 'Text',
+        'FromCustomerID'    => 'Int',
+        'MessageID'            => 'Varchar(100)',
 
-		// user hash and message hash are use to keep the thread going.
-		'UserHash'			=> 'Varchar(100)',
-		'MessageHash'		=> 'Varchar(100)',
-		'Read'				=> 'Boolean'
-	);
+        // user hash and message hash are use to keep the thread going.
+        'UserHash'            => 'Varchar(100)',
+        'MessageHash'        => 'Varchar(100)',
+        'Read'                => 'Boolean'
+    );
 
-	private static $has_one = array(
-		'InReplyTo'			=> 'PostmarkMessage',
-		'From'				=> 'PostmarkSignature',
-		'InboundTo'			=> 'PostmarkSignature'
-	);
+    private static $has_one = array(
+        'InReplyTo'            => 'PostmarkMessage',
+        'From'                => 'PostmarkSignature',
+        'InboundTo'            => 'PostmarkSignature'
+    );
 
-	private static $has_many = array(
-		'Attachments'		=> 'Attachment'
-	);
+    private static $has_many = array(
+        'Attachments'        => 'Attachment'
+    );
 
-	private static $summary_fields = array(
-		'On'				=> 'LastUpdateTime',
-		'Subject',
-		'From'				=> 'FromEmail',
-		'To'
-	);
+    private static $summary_fields = array(
+        'On'                => 'LastUpdateTime',
+        'Subject',
+        'From'                => 'FromEmail',
+        'To'
+    );
 
-	private static $casting = array(
-		'getLastUpdateTime'	=> 'HTMLVarchar'
-	);
-
-
-	public function getLastUpdateTime(){
-		$lastEdited = $this->dbObject('LastEdited');
-		return $lastEdited->Ago(true);
-	}
+    private static $casting = array(
+        'getLastUpdateTime'    => 'HTMLVarchar'
+    );
 
 
-	public function onBeforeDelete(){
-		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID);
-		foreach($children as $child){
-			$child->delete();
-		}
-
-		parent::onBeforeDelete();
-	}
+    public function getLastUpdateTime()
+    {
+        $lastEdited = $this->dbObject('LastEdited');
+        return $lastEdited->Ago(true);
+    }
 
 
-	public function onAfterWrite(){
-		parent::onAfterWrite();
-		if(empty($this->UserHash) || empty($this->MessageHash)){
-			$this->UserHash = $this->makeUserHash();
-			$this->MessageHash = $this->makeMessageHash();
+    public function onBeforeDelete()
+    {
+        $children = PostmarkMessage::get()->filter('InReplyToID', $this->ID);
+        foreach ($children as $child) {
+            $child->delete();
+        }
 
-			$rootMessage = $this->getRootMessage();
-			if($rootMessage->ID == $this->ID){
-				$this->LastEdited = SS_Datetime::now()->getValue();
-			}
-			else{
-				$rootMessage->LastEdited = SS_Datetime::now()->getValue();
-				$rootMessage->write();
-			}
-
-			$this->write();
-		}
-	}
+        parent::onBeforeDelete();
+    }
 
 
-	public function getCMSFields(){
-		$fields = parent::getCMSFields();
+    public function onAfterWrite()
+    {
+        parent::onAfterWrite();
+        if (empty($this->UserHash) || empty($this->MessageHash)) {
+            $this->UserHash = $this->makeUserHash();
+            $this->MessageHash = $this->makeMessageHash();
 
-		$fields->removeByName('Attachments');
+            $rootMessage = $this->getRootMessage();
+            if ($rootMessage->ID == $this->ID) {
+                $this->LastEdited = SS_Datetime::now()->getValue();
+            } else {
+                $rootMessage->LastEdited = SS_Datetime::now()->getValue();
+                $rootMessage->write();
+            }
 
-		return $fields;
-	}
-
-	public function ShowReplyButton(){
-		return $this->FromCustomerID != 0;
-	}
-
-	public function ReplyFromID(){
-		if($rootMessage = $this->getRootMessage()){
-			return $rootMessage->From;
-		}
-	}
-
-	public function ReplyToID(){
-		return $this->FromCustomerID;
-	}
-
-	public function ReplyToSubject(){
-		$strRet = $this->Subject;
-		if(strpos($strRet, 'RE :') != 0){
-			$strRet = 'RE: ' . $strRet;
-		}
-		return $strRet;
-	}
-
-	public function getTitle(){
-		return $this->Subject;
-	}
-
-	public function getRootMessage(){
-		if($this->InReplyToID == 0){
-			return $this;
-		}
-		else if($item = PostmarkMessage::get()->byID($this->InReplyToID)){
-			return $item->getRootMessage();
-		}
-	}
-
-	public function getFromEmail(){
-		if($this->FromCustomerID){
-			if($customer = PostmarkHelper::find_client($this->FromCustomerID)){
-				return $customer->Email;
-			}
-		}
-		else if($this->FromID){
-			return $this->From()->Email;
-		}
-	}
-
-	public function getSummaryLine(){
-		$strContents = strip_tags($this->Message);
-		$strContents = str_replace("\n", " ", $strContents);
-		return substr($strContents, 0, 40);
-	}
-
-	public function getFromTitle(){
-		if($this->FromCustomerID){
-			if($customer = PostmarkHelper::find_client($this->FromCustomerID)){
-				return $customer->getTitle();
-			}
-		}
-		else if($this->FromID){
-			return $this->From()->getTitle();
-		}
-	}
-
-	public function getThread($alRet = null){
-		if(!$alRet){
-			$alRet = new ArrayList();
-			$alRet->push($this);
-		}
-
-		$children = PostmarkMessage::get()->filter('InReplyToID', $this->ID)->sort('ID');
-		foreach($children as $child){
-			$alRet->push($child);
-			$child->getThread($alRet);
-		}
-
-		return $alRet;
-	}
-
-	public function MessagePopupLink(){
-		return Director::baseURL() . 'admin/messages/PostmarkMessage/MessagePopupContents?Subject=' . $this->ReplyToSubject()
-			. '&FromID=' . $this->ReplyFromID()
-			. '&ToID=' . $this->ReplyToID()
-			. '&ReplyToMessageID=' . $this->ID;
-	}
-
-	public function getTo(){
-		if($this->InboundToID){
-			return $this->InboundTo()->Email;
-		}
-
-		$arrEmails = array();
-		$arrIDs = explode(',', $this->ToID);
-		foreach($arrIDs as $iID){
-			if($member = PostmarkHelper::find_client($iID)){
-				$arrEmails[] = $member->Email;
-			}
-		}
-		return implode(', ', $arrEmails);
-	}
-
-	public function makeUserHash(){
-		return md5($this->ToID);
-	}
-
-	public function makeMessageHash(){
-		return md5($this->ID);
-	}
+            $this->write();
+        }
+    }
 
 
-	// reply+userIDthreadID@yourapp.com
-	public function replyToEmailAddress(){
-		if($strInboundEmail = SiteConfig::current_site_config()->InboundEmail){
-			$arrParts = explode('@', $strInboundEmail);
-			if(count($arrParts) == 2){
-				return $arrParts[0] . '+' . $this->makeUserHash() . '+' . $this->makeMessageHash() . '@' . $arrParts[1];
-			}
-			else{
-				user_error('Inbound address doesnt look correct', 'error');
-			}
-		}
-		return null;
-	}
+    public function getCMSFields()
+    {
+        $fields = parent::getCMSFields();
 
-	public function getMessage(){
-		$dbValue = $this->getField('Message');
+        $fields->removeByName('Attachments');
 
-		$strRet = PostmarkHelper::update_attachments($dbValue);
+        return $fields;
+    }
 
-		return $strRet;
+    public function ShowReplyButton()
+    {
+        return $this->FromCustomerID != 0;
+    }
 
-	}
+    public function ReplyFromID()
+    {
+        if ($rootMessage = $this->getRootMessage()) {
+            return $rootMessage->From;
+        }
+    }
 
-	public function Children(){
-		return PostmarkMessage::get()->filter('InReplyToID', $this->ID);
-	}
+    public function ReplyToID()
+    {
+        return $this->FromCustomerID;
+    }
 
-	public function hasUnreadMessage(){
-		if(!$this->Read && $this->FromCustomerID != 0){
-			return true;
-		}
-		foreach($this->Children() as $child){
-			if($child->hasUnreadMessage()){
-				return true;
-			}
-		}
-		return false;
-	}
+    public function ReplyToSubject()
+    {
+        $strRet = $this->Subject;
+        if (strpos($strRet, 'RE :') != 0) {
+            $strRet = 'RE: ' . $strRet;
+        }
+        return $strRet;
+    }
 
-	public function hasNotResponded(){
-		$iMaxDays = Config::inst()->get('PostmarkMessage', 'message_responded_days');
-		if($this->FromID){
-			$days = (strtotime(SS_Datetime::now()) - strtotime($this->LastEdited)) / 86400;
-			if($days > $iMaxDays){
-				return true;
-			}
-		}
-		foreach($this->Children() as $child){
-			if($child->hasNotResponded()){
-				return true;
-			}
-		}
+    public function getTitle()
+    {
+        return $this->Subject;
+    }
 
-		return false;
-	}
+    public function getRootMessage()
+    {
+        if ($this->InReplyToID == 0) {
+            return $this;
+        } elseif ($item = PostmarkMessage::get()->byID($this->InReplyToID)) {
+            return $item->getRootMessage();
+        }
+    }
 
-	public function MessageCounter(&$count, $bUnread = false){
-		if(!$bUnread){
-			$count += 1;
-		}
-		else if(!$this->Read && $this->FromCustomerID != 0){
-			$count += 1;
-		}
-		foreach($this->Children() as $child){
-			$child->MessageCounter($count);
-		}
-	}
+    public function getFromEmail()
+    {
+        if ($this->FromCustomerID) {
+            if ($customer = PostmarkHelper::find_client($this->FromCustomerID)) {
+                return $customer->Email;
+            }
+        } elseif ($this->FromID) {
+            return $this->From()->Email;
+        }
+    }
 
-	public function CountMessages(){
-		$iCount = 0;
-		$this->MessageCounter($iCount);
-		return $iCount;
-	}
+    public function getSummaryLine()
+    {
+        $strContents = strip_tags($this->Message);
+        $strContents = str_replace("\n", " ", $strContents);
+        return substr($strContents, 0, 40);
+    }
 
-	public function CountUnreadMessage(){
-		$iCount = 0;
-		$this->MessageCounter($iCount, true);
-		return $iCount;
-	}
+    public function getFromTitle()
+    {
+        if ($this->FromCustomerID) {
+            if ($customer = PostmarkHelper::find_client($this->FromCustomerID)) {
+                return $customer->getTitle();
+            }
+        } elseif ($this->FromID) {
+            return $this->From()->getTitle();
+        }
+    }
 
-	public function getCountString(){
-		return $this->CountUnreadMessage() . '/' . $this->CountMessages();
-	}
+    public function getThread($alRet = null)
+    {
+        if (!$alRet) {
+            $alRet = new ArrayList();
+            $alRet->push($this);
+        }
 
-	public function updateAsRead(){
-		$this->Read = 1;
-		$this->write();
-	}
+        $children = PostmarkMessage::get()->filter('InReplyToID', $this->ID)->sort('ID');
+        foreach ($children as $child) {
+            $alRet->push($child);
+            $child->getThread($alRet);
+        }
 
-	public function MessageDisplay(){
-		$strContents = $this->Message;
-		if(strpos($strContents, '<body') !== false && strpos($strContents, '</body>')){
+        return $alRet;
+    }
 
-			$iEndOfBody = strpos($strContents, '>', strpos($strContents, '<body')) + 1;
-			$strContents = substr($strContents, $iEndOfBody);
-			$strContents = substr($strContents, 0, strpos($strContents, '</body>'));
+    public function MessagePopupLink()
+    {
+        return Director::baseURL() . 'admin/messages/PostmarkMessage/MessagePopupContents?Subject=' . $this->ReplyToSubject()
+            . '&FromID=' . $this->ReplyFromID()
+            . '&ToID=' . $this->ReplyToID()
+            . '&ReplyToMessageID=' . $this->ID;
+    }
 
-			$strContents = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $strContents);
-			$strContents = preg_replace('#<style(.*?)>(.*?)</style>#is', '', $strContents);
-			$strContents = preg_replace('#<link(.*?)>#is', '', $strContents);
-			$strContents = preg_replace('#<base(.*?)>#is', '', $strContents);
+    public function getTo()
+    {
+        if ($this->InboundToID) {
+            return $this->InboundTo()->Email;
+        }
 
-			$strContents = trim($strContents);
-		}
+        $arrEmails = array();
+        $arrIDs = explode(',', $this->ToID);
+        foreach ($arrIDs as $iID) {
+            if ($member = PostmarkHelper::find_client($iID)) {
+                $arrEmails[] = $member->Email;
+            }
+        }
+        return implode(', ', $arrEmails);
+    }
 
-		return $strContents;
-	}
+    public function makeUserHash()
+    {
+        return md5($this->ToID);
+    }
 
-} 
+    public function makeMessageHash()
+    {
+        return md5($this->ID);
+    }
+
+
+    // reply+userIDthreadID@yourapp.com
+    public function replyToEmailAddress()
+    {
+        if ($strInboundEmail = SiteConfig::current_site_config()->InboundEmail) {
+            $arrParts = explode('@', $strInboundEmail);
+            if (count($arrParts) == 2) {
+                return $arrParts[0] . '+' . $this->makeUserHash() . '+' . $this->makeMessageHash() . '@' . $arrParts[1];
+            } else {
+                user_error('Inbound address doesnt look correct', 'error');
+            }
+        }
+        return null;
+    }
+
+    public function getMessage()
+    {
+        $dbValue = $this->getField('Message');
+
+        $strRet = PostmarkHelper::update_attachments($dbValue);
+
+        return $strRet;
+    }
+
+    public function Children()
+    {
+        return PostmarkMessage::get()->filter('InReplyToID', $this->ID);
+    }
+
+    public function hasUnreadMessage()
+    {
+        if (!$this->Read && $this->FromCustomerID != 0) {
+            return true;
+        }
+        foreach ($this->Children() as $child) {
+            if ($child->hasUnreadMessage()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function hasNotResponded()
+    {
+        $iMaxDays = Config::inst()->get('PostmarkMessage', 'message_responded_days');
+        if ($this->FromID) {
+            $days = (strtotime(SS_Datetime::now()) - strtotime($this->LastEdited)) / 86400;
+            if ($days > $iMaxDays) {
+                return true;
+            }
+        }
+        foreach ($this->Children() as $child) {
+            if ($child->hasNotResponded()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public function MessageCounter(&$count, $bUnread = false)
+    {
+        if (!$bUnread) {
+            $count += 1;
+        } elseif (!$this->Read && $this->FromCustomerID != 0) {
+            $count += 1;
+        }
+        foreach ($this->Children() as $child) {
+            $child->MessageCounter($count);
+        }
+    }
+
+    public function CountMessages()
+    {
+        $iCount = 0;
+        $this->MessageCounter($iCount);
+        return $iCount;
+    }
+
+    public function CountUnreadMessage()
+    {
+        $iCount = 0;
+        $this->MessageCounter($iCount, true);
+        return $iCount;
+    }
+
+    public function getCountString()
+    {
+        return $this->CountUnreadMessage() . '/' . $this->CountMessages();
+    }
+
+    public function updateAsRead()
+    {
+        $this->Read = 1;
+        $this->write();
+    }
+
+    public function MessageDisplay()
+    {
+        $strContents = $this->Message;
+        if (strpos($strContents, '<body') !== false && strpos($strContents, '</body>')) {
+            $iEndOfBody = strpos($strContents, '>', strpos($strContents, '<body')) + 1;
+            $strContents = substr($strContents, $iEndOfBody);
+            $strContents = substr($strContents, 0, strpos($strContents, '</body>'));
+
+            $strContents = preg_replace('#<script(.*?)>(.*?)</script>#is', '', $strContents);
+            $strContents = preg_replace('#<style(.*?)>(.*?)</style>#is', '', $strContents);
+            $strContents = preg_replace('#<link(.*?)>#is', '', $strContents);
+            $strContents = preg_replace('#<base(.*?)>#is', '', $strContents);
+
+            $strContents = trim($strContents);
+        }
+
+        return $strContents;
+    }
+}

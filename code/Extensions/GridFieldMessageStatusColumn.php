@@ -7,44 +7,49 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class GridFieldMessageStatusColumn implements GridField_ColumnProvider {
+class GridFieldMessageStatusColumn implements GridField_ColumnProvider
+{
 
-	public function augmentColumns($gridField, &$columns) {
-		if(!in_array('Status', $columns))
-			$columns[] = 'Status';
-	}
+    public function augmentColumns($gridField, &$columns)
+    {
+        if (!in_array('Status', $columns)) {
+            $columns[] = 'Status';
+        }
+    }
 
-	public function getColumnAttributes($gridField, $record, $columnName) {
-		return array('class' => 'col-message-status');
-	}
-
-
-	public function getColumnMetadata($gridField, $columnName) {
-		if($columnName == 'Status') {
-			return array('title' => '');
-		}
-	}
+    public function getColumnAttributes($gridField, $record, $columnName)
+    {
+        return array('class' => 'col-message-status');
+    }
 
 
-	public function getColumnsHandled($gridField) {
-		return array('Status');
-	}
+    public function getColumnMetadata($gridField, $columnName)
+    {
+        if ($columnName == 'Status') {
+            return array('title' => '');
+        }
+    }
 
-	public function getColumnContent($gridField, $record, $columnName) {
-		Requirements::css(POSTMARK_RELATIVE_PATH . '/css/GridFieldMessageStatusColumn.css');
-		Requirements::javascript(POSTMARK_RELATIVE_PATH . '/javascript/GridFieldMessageStatusColumn.js');
 
-		$strIcon = 'icon-envelope2 opened';
-		if($record->hasUnreadMessage()){
-			$strIcon = 'icon-envelope unread-message';
-		}
+    public function getColumnsHandled($gridField)
+    {
+        return array('Status');
+    }
 
-		if($record->hasNotResponded()){
-			$strIcon .= ' has-not-responded';
-		}
+    public function getColumnContent($gridField, $record, $columnName)
+    {
+        Requirements::css(POSTMARK_RELATIVE_PATH . '/css/GridFieldMessageStatusColumn.css');
+        Requirements::javascript(POSTMARK_RELATIVE_PATH . '/javascript/GridFieldMessageStatusColumn.js');
 
-		return '<span class="action thread-detail"><span class="message-status-icon ' . $strIcon . '"></span>' . $record->getCountString() . '</span>';
+        $strIcon = 'icon-envelope2 opened';
+        if ($record->hasUnreadMessage()) {
+            $strIcon = 'icon-envelope unread-message';
+        }
 
-	}
+        if ($record->hasNotResponded()) {
+            $strIcon .= ' has-not-responded';
+        }
 
-} 
+        return '<span class="action thread-detail"><span class="message-status-icon ' . $strIcon . '"></span>' . $record->getCountString() . '</span>';
+    }
+}
