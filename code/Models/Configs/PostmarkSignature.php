@@ -7,18 +7,18 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class PostmarkSignature extends DataObject {
+class PostmarkSignature extends DataObject
+{
 
-	private static $db = array(
-		'Name'				=> 'Varchar(100)',
-		'Email'				=> 'Varchar(100)',
-		'IsActive'			=> 'Boolean',
-		'IsDefault'			=> 'Boolean'
-	);
+    private static $db = array(
+        'Name'                => 'Varchar(100)',
+        'Email'                => 'Varchar(100)',
+        'IsActive'            => 'Boolean',
+        'IsDefault'            => 'Boolean'
+    );
 
-	private static $summary_fields = array(
-		'Email',
-		'IsActive'
-	);
-
-} 
+    private static $summary_fields = array(
+        'Email',
+        'IsActive'
+    );
+}

@@ -7,13 +7,13 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class CustomerStatus extends DataObject {
+class CustomerStatus extends DataObject
+{
 
-	private static $db = array(
-		'Title'				=> 'Varchar',
-		'Sort'				=> 'Int'
-	);
+    private static $db = array(
+        'Title'                => 'Varchar',
+        'Sort'                => 'Int'
+    );
 
-	private static $default_sort = 'Sort';
-
-} 
+    private static $default_sort = 'Sort';
+}

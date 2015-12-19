@@ -7,21 +7,20 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class PostmarkExtension extends DataExtension {
+class PostmarkExtension extends DataExtension
+{
 
-	private static $db = array(
-		'PostmarkToken'			=> 'Varchar(200)',
-		'InboundEmail'			=> 'Varchar(200)'
-	);
+    private static $db = array(
+        'PostmarkToken'            => 'Varchar(200)',
+        'InboundEmail'            => 'Varchar(200)'
+    );
 
-	public function updateCMSFields(FieldList $fields){
-
-		$fields->addFieldsToTab('Root.Settings.Postmark', array(
-			TextField::create('PostmarkToken'),
-			TextField::create('InboundEmail'),
-			GridField::create('Signatures', 'Signatures')->setList(PostmarkSignature::get())->setConfig(new GridFieldConfig_RecordEditor(20))
-		));
-
-	}
-
-} 
+    public function updateCMSFields(FieldList $fields)
+    {
+        $fields->addFieldsToTab('Root.Settings.Postmark', array(
+            TextField::create('PostmarkToken'),
+            TextField::create('InboundEmail'),
+            GridField::create('Signatures', 'Signatures')->setList(PostmarkSignature::get())->setConfig(new GridFieldConfig_RecordEditor(20))
+        ));
+    }
+}

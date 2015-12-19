@@ -7,23 +7,23 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class PostmarkAttachments extends Controller {
+class PostmarkAttachments extends Controller
+{
 
-	private static $allowed_actions = array(
-		'a'
-	);
+    private static $allowed_actions = array(
+        'a'
+    );
 
-	public function a(){
-		$id = $this->request->param('ID');
-		$attachment = Attachment::get()->filterAny(array(
-			'ID'			=> $id,
-			'ContentID'		=> $id
-		))->first();
-		if($attachment){
-			return $attachment->returnToBrowser();
-		}
-		return $this->httpError(404);
-
-	}
-
-} 
+    public function a()
+    {
+        $id = $this->request->param('ID');
+        $attachment = Attachment::get()->filterAny(array(
+            'ID'            => $id,
+            'ContentID'        => $id
+        ))->first();
+        if ($attachment) {
+            return $attachment->returnToBrowser();
+        }
+        return $this->httpError(404);
+    }
+}
