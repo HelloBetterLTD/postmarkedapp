@@ -17,3 +17,4 @@ Director:
   rules:
     'postmark-notifier//$Action/$ID/$OtherID'          : 'PostmarkNotifier',
     'postmark-attachments//$Action/$ID/$OtherID'       : 'PostmarkAttachments'
+    'objectselectorfield//$Action/$ID/$Other'          : 'ObjectSelectorField_Controller'

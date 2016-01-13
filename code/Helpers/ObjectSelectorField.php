@@ -75,7 +75,7 @@ class ObjectSelectorField extends FormField {
 
 	function Link($action = null){
 		if($this->customLink){
-			return Director::baseURL() . 'ObjectSelectorField_Controller/find/?sourceObject=' . $this->sourceObject . '&displayField=' . $this->getDisplayFieldOptions() . '&multi=' . $this->hasMultiSortOptions();
+			return Director::baseURL() . 'objectselectorfield/find/?sourceObject=' . $this->sourceObject . '&displayField=' . $this->getDisplayFieldOptions() . '&multi=' . $this->hasMultiSortOptions();
 		}
 		return parent::Link($action);
 	}

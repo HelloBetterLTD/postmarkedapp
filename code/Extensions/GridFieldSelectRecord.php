@@ -21,7 +21,7 @@ class GridFieldSelectRecord implements GridField_ColumnProvider {
 
 	public function getColumnMetadata($gridField, $columnName) {
 		if($columnName == 'Selections') {
-			return array('title' => '<input type="checkbox" class="gird-field-select-all"> Select All');
+			return array('title' => '<input type="checkbox" class="gird-field-select-all"> All');
 		}
 	}
 
@@ -33,7 +33,7 @@ class GridFieldSelectRecord implements GridField_ColumnProvider {
 
 	public function getColumnContent($gridField, $record, $columnName) {
 		Requirements::javascript(POSTMARK_RELATIVE_PATH . '/javascript/GridFieldSelectRecord.js');
-		$field = CheckboxField::create('gridfield_select', null);
+		$field = CheckboxField::create('gridfield_select_' . $record->ID, null);
 		$field->addExtraClass('grid-field-select');
 		$field->setAttribute('data-val', $record->ID);
 		return $field->Field();
